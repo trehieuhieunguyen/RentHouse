@@ -1,0 +1,51 @@
+﻿@model RentHouse.Models.ViewModel.HouseVM
+
+@{
+    ViewData["Title"] = "DetailHouse";
+    Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
+}
+
+<h1>DetailHouse</h1>
+
+<div>
+    <h4>House</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.house.NameHourse)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.house.NameHourse)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.house.Ward)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.house.Ward)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.house.City)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.house.City)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.house.District)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.house.District)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.house.ImgUrl)
+        </dt>
+        <dd class = "col-sm-10">
+            <img  src="/img/@Model.house.ImgUrl" />
+        </dd>
+    </dl>
+</div>
+        @foreach(var x in @Model.imageUploads){
+            <img style="width:300px;height:120px;margin-bottom:100px;" src="/img/@x.Image" />
+        }
+<div>
+    <a asp-action="EditHouse" asp-route-id="@Model.house.Id">Edit</a> |
+</div>

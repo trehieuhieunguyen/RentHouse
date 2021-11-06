@@ -1,0 +1,185 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h2>Create a new account.</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           <div class="form-floating">
+                <input asp-for="Input.FirstName" class="form-control" autocomplete="username" aria-required="true" />
+                <label asp-for="Input.FirstName"></label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.LastName" class="form-control" autocomplete="username" aria-required="true" />
+                <label asp-for="Input.LastName"></label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.city" class="control-label"></label>
+                <input  type="hidden" id="value_shipping_provinces" asp-for="Input.city" class="form-control" />
+               
+                <select name="calc_shipping_provinces" id="shipping_provinces"  onChange="update1()">
+                  <option value="" class="form-control" selected>Tỉnh / Thành phố</option>
+                </select>
+                <span asp-validation-for="Input.city" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.district" class="control-label"></label>
+                <input  type="hidden" id="value_shipping_district" asp-for="Input.district" class="form-control" />
+                <select name="calc_shipping_district" id="shipping_district"  onChange="update2()">
+                  <option value="" class="form-control">Quận / Huyện</option>
+                </select>
+                <span asp-validation-for="Input.district" class="text-danger"></span>
+            </div>
+            
+
+            <div class="form-floating">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                <label asp-for="Input.Email"></label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
+                <label asp-for="Input.Password"></label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
+                <label asp-for="Input.ConfirmPassword"></label>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+        </form>
+    </div>
+    <div class="col-md-6 col-md-offset-2">
+        <section>
+            <h3>Use another service to register.</h3>
+            <hr />
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
+                            about setting up this ASP.NET application to support logging in via external services</a>.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins)
+                                {
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <script>//<![CDATA[
+if (address_2 = localStorage.getItem('address_2_saved')) {
+  $('select[name="calc_shipping_district"] option').each(function() {
+    if ($(this).text() == address_2) {
+      $(this).attr('selected', '')
+    }
+  })
+  $('input.billing_address_2').attr('value', address_2)
+}
+if (district = localStorage.getItem('district')) {
+  $('select[name="calc_shipping_district"]').html(district)
+  $('select[name="calc_shipping_district"]').on('change', function() {
+    var target = $(this).children('option:selected')
+    target.attr('selected', '')
+    $('select[name="calc_shipping_district"] option').not(target).removeAttr('selected')
+    address_2 = target.text()
+    $('input.billing_address_2').attr('value', address_2)
+    district = $('select[name="calc_shipping_district"]').html()
+    localStorage.setItem('district', district)
+    localStorage.setItem('address_2_saved', address_2)
+  })
+}
+$('select[name="calc_shipping_provinces"]').each(function() {
+  var $this = $(this),
+    stc = ''
+  c.forEach(function(i, e) {
+    e += +1
+    stc += '<option value=' + e + '>' + i + '</option>'
+    $this.html('<option value="">Tỉnh / Thành phố</option>' + stc)
+    if (address_1 = localStorage.getItem('address_1_saved')) {
+      $('select[name="calc_shipping_provinces"] option').each(function() {
+        if ($(this).text() == address_1) {
+          $(this).attr('selected', '')
+        }
+      })
+      $('input.billing_address_1').attr('value', address_1)
+    }
+    $this.on('change', function(i) {
+      i = $this.children('option:selected').index() - 1
+      var str = '',
+        r = $this.val()
+      if (r != '') {
+        arr[i].forEach(function(el) {
+          str += '<option value="' + el + '">' + el + '</option>'
+          $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>' + str)
+        })
+        var address_1 = $this.children('option:selected').text()
+        var district = $('select[name="calc_shipping_district"]').html()
+        localStorage.setItem('address_1_saved', address_1)
+        localStorage.setItem('district', district)
+        $('select[name="calc_shipping_district"]').on('change', function() {
+          var target = $(this).children('option:selected')
+          target.attr('selected', '')
+          $('select[name="calc_shipping_district"] option').not(target).removeAttr('selected')
+          var address_2 = target.text()
+          $('input.billing_address_2').attr('value', address_2)
+          district = $('select[name="calc_shipping_district"]').html()
+          localStorage.setItem('district', district)
+          localStorage.setItem('address_2_saved', address_2)
+        })
+      } else {
+        $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>')
+        district = $('select[name="calc_shipping_district"]').html()
+        localStorage.setItem('district', district)
+        localStorage.removeItem('address_1_saved', address_1)
+      }
+    })
+  })
+})
+//]]></script>
+        <script type="text/javascript">
+			function update1() {
+				var select = document.getElementById('shipping_provinces');
+				var option = select.options[select.selectedIndex];
+
+				document.getElementById('value_shipping_provinces').value = option.value;
+			}
+
+			update1();
+            function update2() {
+				var select = document.getElementById('shipping_district');
+				var option = select.options[select.selectedIndex];
+
+				document.getElementById('value_shipping_district').value = option.value;
+			}
+
+			update2();
+		</script>
+     <partial name="_ValidationScriptsPartial" />
+}

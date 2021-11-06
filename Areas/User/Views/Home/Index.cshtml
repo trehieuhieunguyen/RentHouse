@@ -1,0 +1,96 @@
+﻿@model IEnumerable<RentHouse.Models.RoomHouse>
+
+@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+<body>
+	<!-- Navigation-->
+	<!-- Header-->
+	<header class="bg-dark py-5">
+		<div class="container px-4 px-lg-5 my-5">
+			<div class="text-center text-white">
+				<h1 class="display-4 fw-bolder">Shop in style</h1>
+				<p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
+			</div>
+		</div>
+	</header>
+	
+	<form class="form-inline" role="form">
+		<div class="form-group">
+                <label class="control-label">PriceRent</label>
+                <input type="hidden" id="priceRent" name="priceRent" class="form-control"/>
+                <select id="selectpriceRent" onchange="update4()">
+                    <option value="0">PriceRent</option>
+                    <option value="10">10$</option>
+                    <option value="20">20$</option> 
+                    <option value="50">50$</option>
+                    <option value="100">100$</option>
+                </select>
+            </div>
+		<div class="form-group input ">
+			<input style="border:none;box-shadow: none !important;background-color: #DDDDDD;" type="text" class="form-control" name="" id="search" placeholder="Nhập" value="@ViewBag.keyword">
+		</div>
+		<button type="button" id="searchurl" class="iconsearch">
+			<i class="fas fa-search" aria-hidden="true" style="color: white;width:80px;height:40px;"></i>
+		</button>
+	</form>
+	<section class="py-5">
+		<div class="container px-4 px-lg-5 mt-5">
+			<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+				@foreach (var x in Model)
+				{
+					<div class="col mb-5">
+						<div class="card h-100">
+							<!-- Product image-->
+						<img class="card-img-top" height="276" src="/img/@x.UrlImg" alt="..." />
+							<!-- Product details-->
+						<div class="card-body p-4">
+								<div class="text-center">
+									<!-- Product name-->
+								<h5 class="fw-bolder">@x.house.NameHourse</h5>
+									<!-- Product price-->
+									$@x.PriceRent
+								</div>
+							</div>
+							<!-- Product actions-->
+						<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+								<div class="text-center"><a class="btn btn-outline-dark mt-auto" asp-action="DetailRoom" asp-route-id="@x.Id">View options</a></div>
+							</div>
+						</div>
+					</div>
+
+				}
+			</div>
+		</div>
+	</section>
+	<!-- Footer-->
+	<footer class="py-5 bg-dark">
+		<div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p></div>
+	</footer>
+	<!-- Bootstrap core JS-->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Core theme JS-->
+	<script src="js/scripts.js"></script>
+</body>
+@section Scripts{
+<script>
+	$("#searchurl").click(function (){
+		var url = 'User/?input=' + $("#search").val()+'&priceRent='+$("#priceRent").val();
+		var urlMain = window.location.href;
+		var arr = urlMain.split("/");
+		var result = arr[0] + "//" + arr[2] + "/" + url;
+		window.location.href = result;
+	});
+	function update4() {
+				var select = document.getElementById('selectpriceRent');
+				var option = select.options[select.selectedIndex];
+
+				document.getElementById('priceRent').value = option.value;
+			}
+
+			update4();
+</script>
+}
+

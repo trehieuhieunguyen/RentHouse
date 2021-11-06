@@ -1,0 +1,199 @@
+﻿
+@model ReflectionIT.Mvc.Paging.PagingList<RentHouse.Models.RoomHouse>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *, ReflectionIT.Mvc.Paging.PagingList
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
+}
+@{
+    var start = this.Model.StartPageIndex;
+    var stop = this.Model.StopPageIndex;
+}
+<p>
+    <a asp-action="CreateRoom">Create New</a>
+    
+</p>
+@if (TempData["SuccessFull"] != null)
+{
+    <div class="p-3 mb-2 bg-success text-white">
+        @TempData["SuccessFull"]
+    </div>
+}
+@if(TempData["Error"]!=null){
+    <div class="p-3 mb-2 bg-danger text-white">
+    @TempData["Error"]
+    </div>
+}
+
+                    <form class="form-inline"  role="form">
+                        <div class="form-group input ">
+                        <input style="border:none;box-shadow: none !important;background-color: #DDDDDD;" type="text" class="form-control" name="" id="search" placeholder="Nhập" value="@ViewBag.KeywordRoom">   
+                        </div>
+                        <button type="button" id="searchurl" class="iconsearch"><i class="fas fa-search" aria-hidden="true" style="color: white;width:80px;height:40px;"></i>
+                        </button>
+                        
+                    </form>
+                 
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Id)
+            </th>
+             <th>
+                @Html.DisplayNameFor(model => model.First().UrlImg)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().HouseId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().RoomNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().RoomSize)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Windowns)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().PriceRent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().StatusRent)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+    {
+        ViewData["isdeleted"]= @item.StatusRent ? "opacity:0.7" : ""; 
+    }
+            <tr  style="@ViewData["isdeleted"];">
+                <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                <img style="width:100px;height:40px;" src="/img/@item.UrlImg" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HouseId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomSize)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Windowns)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceRent)
+            </td>
+             @if(item.StatusRent){
+                   <td>Đã Thuê</td>
+                }else{
+                    <td>Chưa Thuê</td> 
+                }
+            <td>
+                <a asp-action="EditRoom" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="DetailRoom" asp-route-id="@item.Id">Details</a> |        
+              @if(item.StatusRent){
+                    <button class="btn btn-danger btn-sm rounded-0" type="button"  data-toggle="modal" data-target="#exampleModalCenter" value="@item.Id" >HadRent</button>
+                }else{
+                    <button class="btn btn-success btn-sm rounded-0" type="button"  data-toggle="modal" data-target="#exampleModalCenter" value="@item.Id" >Nobody</button>
+                }
+            </td>
+        </tr>
+
+                       <div id="exampleModalCenter" class="modal fade">
+                                    <div class="modal-dialog modal-confirm">
+                                        <div class="modal-content">
+                                            <div class="modal-header flex-column">
+                                                <h4 class="modal-title w-100">Are you sure?</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Do you really want to delete these records? This process cannot be undone.</p>
+                                            </div>
+                                            <div class="modal-footer justify-content-center">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                <form asp-action="DeleteRoom">
+
+                                                    <input type="hidden" id="idremove" name="Id" value="" />
+                                                     
+                                                    <input type="submit" value="Sure"  class="btn btn-danger" />
+                                                      
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                         </div>
+                         }
+    </tbody>
+</table>
+
+@if (this.Model.PageCount > 1) {
+    <ul class="pagination pagination-sm justify-content-end">
+
+        @if (start > 1) {
+            <li class="page-item">
+                <a href="@Url.Action(Model.Action, Model.GetRouteValueForPage(1))" aria-label="First" class="page-link">
+                    <span aria-hidden="true">1</span>
+                </a>
+            </li>
+        }
+
+        @if (this.Model.PageIndex > 1) {
+            <li class="page-item">
+                <a href="@Url.Action(Model.Action, Model.GetRouteValueForPage(this.Model.PageIndex - 1))" aria-label="Previous" class="page-link">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        }
+
+        @for (int i = start; i <= stop; i++) {
+            <li class="page-item @((Model.PageIndex == i) ? "active" : null)">
+                @Html.ActionLink(i.ToString(), Model.Action,new{input=@ViewBag.KeywordRoom,pageIndex=i},new { @class = "page-link" })
+            </li>
+        }
+
+        @if (this.Model.PageIndex < this.Model.PageCount) {
+            <li class="page-item">
+                <a href="@Url.Action(Model.Action, Model.GetRouteValueForPage(this.Model.PageIndex + 1))" aria-label="Next" class="page-link">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        }
+
+        @if (stop < this.Model.PageCount) {
+            <li class="page-item">
+                <a href="@Url.Action(Model.Action, Model.GetRouteValueForPage(this.Model.PageCount))" aria-label="Last" class="page-link">
+                    <span aria-hidden="true">@this.Model.PageCount</span>
+                </a>
+            </li>
+        }
+
+    </ul>
+}
+@section Scripts{
+    <script>
+        $("button").click(function() {
+        var id_remove = $(this).attr('value');
+            console.log(id_remove);
+               $("#idremove").attr("value", id_remove );
+        });
+        $("#searchurl").click(function (){
+            var url = 'Admins/Room/?input=' + $("#search").val();
+            var urlMain = window.location.href; 
+            var arr = urlMain.split("/"); 
+            var result = arr[0] + "//" + arr[2] + "/" + url;
+            window.location.href = result;
+        });
+    </script>
+}
+
+
+
