@@ -2,7 +2,6 @@
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
-    Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -14,47 +13,48 @@
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
            <div class="form-floating">
+               <label asp-for="Input.FirstName"></label>
                 <input asp-for="Input.FirstName" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.FirstName"></label>
                 <span asp-validation-for="Input.FirstName" class="text-danger"></span>
             </div>
             <div class="form-floating">
-                <input asp-for="Input.LastName" class="form-control" autocomplete="username" aria-required="true" />
                 <label asp-for="Input.LastName"></label>
+                <input asp-for="Input.LastName" class="form-control" autocomplete="username" aria-required="true" /> 
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.city" class="control-label"></label>
+            <div class="form-floating mb-2 mt-2">
+               
                 <input  type="hidden" id="value_shipping_provinces" asp-for="Input.city" class="form-control" />
                
-                <select name="calc_shipping_provinces" id="shipping_provinces"  onChange="update1()">
+                <select name="calc_shipping_provinces" id="shipping_provinces"  onChange="update1()"  class="form-control">
                   <option value="" class="form-control" selected>Tỉnh / Thành phố</option>
                 </select>
                 <span asp-validation-for="Input.city" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.district" class="control-label"></label>
+            <div class="form-floating mb-2">
+                
                 <input  type="hidden" id="value_shipping_district" asp-for="Input.district" class="form-control" />
-                <select name="calc_shipping_district" id="shipping_district"  onChange="update2()">
-                  <option value="" class="form-control">Quận / Huyện</option>
+                <select name="calc_shipping_district" id="shipping_district"  onChange="update2()"  class="form-control">
+                  <option value="" class="form-control" >Quận / Huyện</option>
                 </select>
                 <span asp-validation-for="Input.district" class="text-danger"></span>
             </div>
             
 
             <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
                 <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating">
+                 <label asp-for="Input.Password"></label>
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.Password"></label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
             <div class="form-floating">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
                 <label asp-for="Input.ConfirmPassword"></label>
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
@@ -111,8 +111,6 @@ if (district = localStorage.getItem('district')) {
     address_2 = target.text()
     $('input.billing_address_2').attr('value', address_2)
     district = $('select[name="calc_shipping_district"]').html()
-    localStorage.setItem('district', district)
-    localStorage.setItem('address_2_saved', address_2)
   })
 }
 $('select[name="calc_shipping_provinces"]').each(function() {
@@ -120,8 +118,9 @@ $('select[name="calc_shipping_provinces"]').each(function() {
     stc = ''
   c.forEach(function(i, e) {
     e += +1
-    stc += '<option value=' + e + '>' + i + '</option>'
-    $this.html('<option value="">Tỉnh / Thành phố</option>' + stc)
+   
+    stc += '<option value="'+i+'">' + i + '</option>'
+   
     if (address_1 = localStorage.getItem('address_1_saved')) {
       $('select[name="calc_shipping_provinces"] option').each(function() {
         if ($(this).text() == address_1) {
@@ -130,6 +129,7 @@ $('select[name="calc_shipping_provinces"]').each(function() {
       })
       $('input.billing_address_1').attr('value', address_1)
     }
+     $this.html('<option value="">Tỉnh / Thành phố</option>' + stc)
     $this.on('change', function(i) {
       i = $this.children('option:selected').index() - 1
       var str = '',
@@ -141,8 +141,7 @@ $('select[name="calc_shipping_provinces"]').each(function() {
         })
         var address_1 = $this.children('option:selected').text()
         var district = $('select[name="calc_shipping_district"]').html()
-        localStorage.setItem('address_1_saved', address_1)
-        localStorage.setItem('district', district)
+        
         $('select[name="calc_shipping_district"]').on('change', function() {
           var target = $(this).children('option:selected')
           target.attr('selected', '')
@@ -150,14 +149,12 @@ $('select[name="calc_shipping_provinces"]').each(function() {
           var address_2 = target.text()
           $('input.billing_address_2').attr('value', address_2)
           district = $('select[name="calc_shipping_district"]').html()
-          localStorage.setItem('district', district)
-          localStorage.setItem('address_2_saved', address_2)
+          
         })
       } else {
         $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>')
         district = $('select[name="calc_shipping_district"]').html()
-        localStorage.setItem('district', district)
-        localStorage.removeItem('address_1_saved', address_1)
+        
       }
     })
   })

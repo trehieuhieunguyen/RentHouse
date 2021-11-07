@@ -130,11 +130,7 @@ namespace RentHouse.Areas.Identity.Pages.Account
                     {
                         return RedirectToAction("Index", "Home", new { area = "Admins" });
                     }
-                    else
-                    if (roles.Contains("User"))
-                    {
-                        return RedirectToAction("Index", "Home", new { area = "User" });
-                    }
+                    
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

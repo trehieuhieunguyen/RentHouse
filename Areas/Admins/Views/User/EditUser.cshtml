@@ -41,8 +41,8 @@
                 <label asp-for="City" class="control-label"></label>
                 <input  type="hidden" id="value_shipping_provinces" asp-for="City" class="form-control" />
                
-                <select asp-for="City" name="calc_shipping_provinces" id="shipping_provinces"  onChange="update1()">
-                  <option value=""  class="form-control" selected="selected">Tỉnh / Thành phố</option>
+                <select class="form-control" asp-for="City" name="calc_shipping_provinces" id="shipping_provinces"  onChange="update1()">
+                  <option value=""  selected="selected">@Model.City</option>
                 </select>
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
@@ -50,8 +50,8 @@
             <div class="form-group">
                 <label asp-for="District" class="control-label"></label>
                 <input  type="hidden" id="value_shipping_district" asp-for="District" class="form-control" />
-                <select asp-for="District" name="calc_shipping_district" id="shipping_district"  onChange="update2()">
-                  <option value="" class="form-control" selected="selected">Quận / Huyện</option>
+                <select class="form-control" asp-for="District" name="calc_shipping_district" id="shipping_district"  onChange="update2()">
+                  <option value=""  selected="selected">@Model.District</option>
                 </select>
                 <span asp-validation-for="District" class="text-danger"></span>
             </div>
@@ -105,8 +105,7 @@ if (district = localStorage.getItem('district')) {
     address_2 = target.text()
     $('input.billing_address_2').attr('value', address_2)
     district = $('select[name="calc_shipping_district"]').html()
-    localStorage.setItem('district', district)
-    localStorage.setItem('address_2_saved', address_2)
+    
   })
 }
 $('select[name="calc_shipping_provinces"]').each(function() {
@@ -114,8 +113,8 @@ $('select[name="calc_shipping_provinces"]').each(function() {
     stc = ''
   c.forEach(function(i, e) {
     e += +1
-    stc += '<option value=' + e + '>' + i + '</option>'
-    $this.html('<option value="">Tỉnh / Thành phố</option>' + stc)
+    stc += '<option value="'+i+'">' + i + '</option>'
+    $this.html('<option value="@Model.City">@Model.City</option>' + stc)
     if (address_1 = localStorage.getItem('address_1_saved')) {
       $('select[name="calc_shipping_provinces"] option').each(function() {
         if ($(this).text() == address_1) {
@@ -135,8 +134,7 @@ $('select[name="calc_shipping_provinces"]').each(function() {
         })
         var address_1 = $this.children('option:selected').text()
         var district = $('select[name="calc_shipping_district"]').html()
-        localStorage.setItem('address_1_saved', address_1)
-        localStorage.setItem('district', district)
+        
         $('select[name="calc_shipping_district"]').on('change', function() {
           var target = $(this).children('option:selected')
           target.attr('selected', '')
@@ -144,14 +142,12 @@ $('select[name="calc_shipping_provinces"]').each(function() {
           var address_2 = target.text()
           $('input.billing_address_2').attr('value', address_2)
           district = $('select[name="calc_shipping_district"]').html()
-          localStorage.setItem('district', district)
-          localStorage.setItem('address_2_saved', address_2)
+          
         })
       } else {
         $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>')
         district = $('select[name="calc_shipping_district"]').html()
-        localStorage.setItem('district', district)
-        localStorage.removeItem('address_1_saved', address_1)
+      
       }
     })
   })

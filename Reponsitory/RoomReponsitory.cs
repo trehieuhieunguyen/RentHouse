@@ -89,8 +89,18 @@ namespace RentHouse.Reponsitory
                                                 ||x.house.District.Contains(title)
                                                 ||x.house.Ward.Contains(title)
                                                 ||x.house.NameHourse.Contains(title))
-                                                &&x.PriceRent<=price).ToListAsync();
+                                                &&x.PriceRent<=price).Take(6).ToListAsync();
             return x;
+        }
+        public async Task<ICollection<MessageRoom>> GetCommentRooms(int id)
+        {
+            var x = await _db.messageRooms.Include(x=>x.ApplicationUser).Include(x=>x.RoomHouse).Where(x=>x.RoomHouseId == id).ToListAsync();
+            return x;
+        }
+        public bool SaveComment(MessageRoom comment)
+        {
+            var x = _db.messageRooms.Update(comment);
+            return SaveChange();
         }
         public async Task<RoomHouse> GetRoomHouseForUserbyId(int id)
         {

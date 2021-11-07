@@ -18,5 +18,6 @@ namespace RentHouse.Data
         public DbSet<Agreement> agreements { get; set; }
         public DbSet<Transaction> transactions { get; set; }
         public DbSet<ImageUpload> imageUploads { get; set; }
+        public DbSet<MessageRoom> messageRooms { get; set; }
     }
 }

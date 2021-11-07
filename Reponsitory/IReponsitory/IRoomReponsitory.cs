@@ -12,5 +12,7 @@ namespace RentHouse.Reponsitory.IReponsitory
          Task<bool> DeleteRoom(int id);
         Task<ICollection<RoomHouse>> GetRoomHouseForUser(string title,string pricerent);
         Task<RoomHouse> GetRoomHouseForUserbyId(int id);
+        Task<ICollection<MessageRoom>> GetCommentRooms(int id);
+        bool SaveComment(MessageRoom comment);
     }
 }

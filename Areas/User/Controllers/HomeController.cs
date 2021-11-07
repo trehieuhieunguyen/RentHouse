@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RentHouse.Extensions;
 using RentHouse.Models;
+using RentHouse.Models.ViewModel;
 using RentHouse.Reponsitory.IReponsitory;
 
 namespace RentHouse.Areas.User.Controllers
@@ -10,7 +12,6 @@ namespace RentHouse.Areas.User.Controllers
     public class HomeController : Controller
     {
         private readonly IRoomReponsitory _res;
-
         public HomeController(IRoomReponsitory res)
         {
             _res = res;
@@ -23,9 +24,40 @@ namespace RentHouse.Areas.User.Controllers
         }
         public async Task<IActionResult> DetailRoom(int id)
         {
-            var house = await _res.GetRoomHouseForUserbyId(id);
+            RoomCommentVM roomCommentVM = new RoomCommentVM();
             
-            return View(house);
+            var roomhouse = await _res.GetRoomHouseForUserbyId(id);
+            roomCommentVM.roomHouse = roomhouse;
+            
+            var commentroom = await _res.GetCommentRooms(id);
+            roomCommentVM.commentRooms = commentroom;
+            
+            return View(roomCommentVM);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CommitMessage(string message,int id)
+        {
+            MessageRoom commentRoom = new MessageRoom();
+            commentRoom.ApplicationUserId = User.GetUserId();
+            commentRoom.Status = true;
+            commentRoom.UpdateTime= DateTime.Now;
+            commentRoom.CreateTime= DateTime.Now;
+            commentRoom.RoomHouseId = id;
+            commentRoom.Text = message;
+            if (_res.SaveComment(commentRoom))
+            {
+                RoomCommentVM roomCommentVM = new RoomCommentVM();
+
+                var roomhouse = await _res.GetRoomHouseForUserbyId(id);
+                roomCommentVM.roomHouse = roomhouse;
+
+                var commentroom = await _res.GetCommentRooms(id);
+                roomCommentVM.commentRooms = commentroom;
+
+                return View("DetailRoom", roomCommentVM);
+               
+            }
+            return RedirectToAction("DetailRoom", id);
         }
     }
 }

@@ -1,24 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RentHouse.Models;
+using RentHouse.Reponsitory.IReponsitory;
 using System.Diagnostics;
 
 namespace RentHouse.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IRoomReponsitory _res;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IRoomReponsitory res)
         {
-            _logger = logger;
+            _res = res;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index([FromQuery(Name = ("input"))] string input = "", string priceRent = "")
         {
-            ViewData["Index"] = "HieuDepZai";
-            return View();
+            var x = await _res.GetRoomHouseForUser(input, priceRent);
+            return View(x);
         }
-
+        
         public IActionResult Privacy()
         {
             return View();
