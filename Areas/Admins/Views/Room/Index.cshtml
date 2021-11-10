@@ -30,6 +30,9 @@
                         <div class="form-group input ">
                         <input style="border:none;box-shadow: none !important;background-color: #DDDDDD;" type="text" class="form-control" name="" id="search" placeholder="Nhập" value="@ViewBag.KeywordRoom">   
                         </div>
+                        <div class="form-group">
+		                        <input id="pagechoose" name="pagechoose" value="@ViewBag.pagechoose" class="form-control" />
+	                        </div>
                         <button type="button" id="searchurl" class="iconsearch"><i class="fas fa-search" aria-hidden="true" style="color: white;width:80px;height:40px;"></i>
                         </button>
                         
@@ -156,7 +159,7 @@
 
         @for (int i = start; i <= stop; i++) {
             <li class="page-item @((Model.PageIndex == i) ? "active" : null)">
-                @Html.ActionLink(i.ToString(), Model.Action,new{input=@ViewBag.KeywordRoom,pageIndex=i},new { @class = "page-link" })
+                @Html.ActionLink(i.ToString(), Model.Action,new{input=@ViewBag.KeywordRoom,pageIndex=i,selectpage=@ViewBag.pagechoose},new { @class = "page-link" })
             </li>
         }
 
@@ -186,7 +189,7 @@
                $("#idremove").attr("value", id_remove );
         });
         $("#searchurl").click(function (){
-            var url = 'Admins/Room/?input=' + $("#search").val();
+            var url = 'Admins/Room/?input=' + $("#search").val()+'&selectpage='+$("#pagechoose").val();
             var urlMain = window.location.href; 
             var arr = urlMain.split("/"); 
             var result = arr[0] + "//" + arr[2] + "/" + url;

@@ -50,7 +50,15 @@ namespace RentHouse.Areas.Admins.Controllers
         }
         public async Task<IActionResult> EditUser(string id)
         {
+			if (id == null)
+			{
+                return BadRequest();
+			}
             var user = await _res.GetUserByIdAsync(id);
+            if(user == null)
+			{
+                return NotFound();
+			}
             return View(user);
         }
         [HttpPost]
@@ -111,6 +119,10 @@ namespace RentHouse.Areas.Admins.Controllers
         [HttpPost, ActionName("DeleteUser")]
         public async Task<IActionResult> DeleteHouse(string id)
         {
+			if (id == null)
+			{
+                return BadRequest();
+			}
             if (await _res.DeleteUser(id))
             {
                 return RedirectToAction("Index");

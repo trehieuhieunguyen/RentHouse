@@ -1,16 +1,87 @@
-﻿@model IEnumerable<RentHouse.Models.RoomHouse>
-
+﻿@model ReflectionIT.Mvc.Paging.PagingList<RentHouse.Models.RoomHouse>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *, ReflectionIT.Mvc.Paging.PagingList
+@{
+	var start = this.Model.StartPageIndex;
+	var stop = this.Model.StopPageIndex;
+}
 @{
 	ViewData["Title"] = "Index";
 	Layout = "~/Views/Shared/_Layout1.cshtml";
 }
+<select class="form-select" id="selectpriceRent" onchange="update4()">
+	<option value="0">PriceRent</option>
+	<option value="10">10$</option>
+	<option value="20">20$</option>
+	<option value="50">50$</option>
+	<option value="100">100$</option>
+</select>
+<form class="form-inline" role="form">
+	<input class="form-group" type="hidden" id="priceRent" name="priceRent" class="form-control" />
+	<div class="form-group input ">
+		<input style="border:none;box-shadow: none !important;background-color: #DDDDDD;" type="text" class="form-control" name="" id="search" placeholder="Nhập" value="@ViewBag.keyword">
+	</div>
+	<button type="button" id="searchurl" class="iconsearch">
+		<i class="fas fa-search" aria-hidden="true" style="color: white;width:80px;height:40px;"></i>
+	</button>
+</form>
 
 <div class="col-md-12">
-            <div class="section-heading">
-              <h2>Latest Products</h2>
-              <a href="products.html">view all products <i class="fa fa-angle-right"></i></a>
-            </div>
-          </div>
+	<div class="section-heading">
+		<h2>Latest Products</h2>
+		<a href="products.html">view all products <i class="fa fa-angle-right"></i></a>
+	</div>
+	@if (this.Model.PageCount > 1)
+	{
+		<ul class="pagination pagination-sm justify-content-end">
+
+			@if (start > 1)
+			{
+				<li class="page-item">
+					<a href="@Url.Action(Model.Action, Model.GetRouteValueForPage(1))" aria-label="First" class="page-link">
+						<span aria-hidden="true">1</span>
+					</a>
+				</li>
+			}
+
+			@if (this.Model.PageIndex > 1)
+			{
+				<li class="page-item">
+					<a href="@Url.Action(Model.Action, Model.GetRouteValueForPage(this.Model.PageIndex - 1))" aria-label="Previous" class="page-link">
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+			}
+
+			@for (int i = start; i <= stop; i++)
+			{
+				<li class="page-item @((Model.PageIndex == i) ? "active" : null)">
+					@Html.ActionLink(i.ToString(), Model.Action,new{input=@ViewBag.keyword,pageIndex=i,selectpage=@ViewBag.pagechoose},new { @class = "page-link" })
+				</li>
+			}
+
+			@if (this.Model.PageIndex < this.Model.PageCount)
+			{
+				<li class="page-item">
+					<a href="@Url.Action(Model.Action, Model.GetRouteValueForPage(this.Model.PageIndex + 1))" aria-label="Next" class="page-link">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+			}
+
+			@if (stop < this.Model.PageCount)
+			{
+				<li class="page-item">
+					<a href="@Url.Action(Model.Action, Model.GetRouteValueForPage(this.Model.PageCount))" aria-label="Last" class="page-link">
+						<span aria-hidden="true">@this.Model.PageCount</span>
+					</a>
+				</li>
+			}
+
+		</ul>
+	}
+</div>
+
 @foreach (var x in Model)
 {
 	<div class="col-md-4">
@@ -27,30 +98,50 @@
 					<li><i class="fas fa-star"></i></li>
 					<li><i class="fas fa-star"></i></li>
 				</ul>
-				<span><a class="btn btn-outline-dark mt-auto" asp-action="DetailRoom" asp-route-id="@x.Id" asp-area="User">View options</a></span> 
+				<span><a class="btn btn-outline-dark mt-auto" asp-action="DetailRoom" asp-route-id="@x.Id" asp-area="User">View options</a></span>
 			</div>
 		</div>
 	</div>
 }
- @Html.Partial("_Looking")
+
+@Html.Partial("_Looking")
 
 
-    <div class="call-to-action">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="inner-content">
-              <div class="row">
-                <div class="col-md-8">
-                  <h4>Creative &amp; Unique <em>Sixteen</em> Products</h4>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque corporis amet elite author nulla.</p>
-                </div>
-                <div class="col-md-4">
-                  <a href="#" class="filled-button">Purchase Now</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="call-to-action">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="inner-content">
+					<div class="row">
+						<div class="col-md-8">
+							<h4>Creative &amp; Unique <em>Sixteen</em> Products</h4>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque corporis amet elite author nulla.</p>
+						</div>
+						<div class="col-md-4">
+							<a href="#" class="filled-button">Purchase Now</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@section Scripts{
+<script>
+	$("#searchurl").click(function (){
+		var url = '?input=' + $("#search").val()+'&priceRent='+$("#priceRent").val();
+		var urlMain = window.location.href;
+		var arr = urlMain.split("/");
+		var result = arr[0] + "//" + arr[2] + "/" + url;
+		window.location.href = result;
+	});
+	function update4() {
+				var select = document.getElementById('selectpriceRent');
+				var option = select.options[select.selectedIndex];
+
+				document.getElementById('priceRent').value = option.value;
+			}
+
+			update4();
+</script>
+}

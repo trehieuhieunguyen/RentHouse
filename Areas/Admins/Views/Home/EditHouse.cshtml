@@ -108,7 +108,7 @@ $('select[name="calc_shipping_provinces"]').each(function() {
   c.forEach(function(i, e) {
     e += +1
     stc += '<option value="'+i+'">' + i + '</option>'
-    $this.html('<option value="">@Model.house.City</option>' + stc)
+    $this.html('<option value="@Model.house.City">@Model.house.City</option>' + stc)
     if (address_1 = localStorage.getItem('address_1_saved')) {
       $('select[name="calc_shipping_provinces"] option').each(function() {
         if ($(this).text() == address_1) {

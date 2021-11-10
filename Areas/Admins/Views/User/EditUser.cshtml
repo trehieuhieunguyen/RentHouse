@@ -42,7 +42,7 @@
                 <input  type="hidden" id="value_shipping_provinces" asp-for="City" class="form-control" />
                
                 <select class="form-control" asp-for="City" name="calc_shipping_provinces" id="shipping_provinces"  onChange="update1()">
-                  <option value=""  selected="selected">@Model.City</option>
+                  <option value="@Model.City"  selected="selected">@Model.City</option>
                 </select>
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
@@ -51,7 +51,7 @@
                 <label asp-for="District" class="control-label"></label>
                 <input  type="hidden" id="value_shipping_district" asp-for="District" class="form-control" />
                 <select class="form-control" asp-for="District" name="calc_shipping_district" id="shipping_district"  onChange="update2()">
-                  <option value=""  selected="selected">@Model.District</option>
+                  <option value="@Model.District"  selected="selected">@Model.District</option>
                 </select>
                 <span asp-validation-for="District" class="text-danger"></span>
             </div>

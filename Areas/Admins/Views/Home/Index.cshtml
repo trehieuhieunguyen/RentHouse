@@ -30,9 +30,13 @@
 	<div class="form-group input ">
 		<input style="border:none;box-shadow: none !important;background-color: #DDDDDD;" type="text" class="form-control" name="" id="search" placeholder="Nhập" value="@ViewBag.keyword">
 	</div>
+	<div class="form-group">
+		<input id="pagechoose" name="pagechoose" value="@ViewBag.pagechoose" class="form-control" />
+	</div>
 	<button type="button" id="searchurl" class="iconsearch">
 		<i class="fas fa-search" aria-hidden="true" style="color: white;width:80px;height:40px;"></i>
 	</button>
+
 </form>
 
 <table class="table">
@@ -174,7 +178,7 @@
 		@for (int i = start; i <= stop; i++)
 		{
 			<li class="page-item @((Model.PageIndex == i) ? "active" : null)">
-				@Html.ActionLink(i.ToString(), Model.Action,new{input=@ViewBag.keyword,pageIndex=i},new { @class = "page-link" })
+				@Html.ActionLink(i.ToString(), Model.Action,new{input=@ViewBag.keyword,pageIndex=i,selectpage=@ViewBag.pagechoose},new { @class = "page-link" })
 			</li>
 		}
 
@@ -200,18 +204,18 @@
 }
 @section Scripts{
 <script>
-	$("button").click(function() {
-	var id_remove = $(this).attr('value');
-		console.log(id_remove);
-		   $("#idremove").attr("value", id_remove );
-	});
-	$("#searchurl").click(function (){
-		var url = 'Admins/?input=' + $("#search").val();
-		var urlMain = window.location.href;
-		var arr = urlMain.split("/");
-		var result = arr[0] + "//" + arr[2] + "/" + url;
-		window.location.href = result;
-	});
+		$("button").click(function() {
+		var id_remove = $(this).attr('value');
+			console.log(id_remove);
+			   $("#idremove").attr("value", id_remove );
+		});
+		$("#searchurl").click(function (){
+			var url = 'Admins/?input=' + $("#search").val()+'&selectpage='+$("#pagechoose").val();
+			var urlMain = window.location.href;
+			var arr = urlMain.split("/");
+			var result = arr[0] + "//" + arr[2] + "/" + url;
+			window.location.href = result;	
+		});
 </script>
 }
 

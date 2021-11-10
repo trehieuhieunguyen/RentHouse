@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ReflectionIT.Mvc.Paging;
 using RentHouse.Models;
 using RentHouse.Reponsitory.IReponsitory;
 using System.Diagnostics;
@@ -14,10 +15,13 @@ namespace RentHouse.Controllers
             _res = res;
         }
 
-        public async Task<IActionResult> Index([FromQuery(Name = ("input"))] string input = "", string priceRent = "")
+        public async Task<IActionResult> Index(int pageIndex = 1,[FromQuery(Name = ("input"))] string input = "", string priceRent = "", int selectpage = 6)
         {
-            var x = await _res.GetRoomHouseForUser(input, priceRent);
-            return View(x);
+            ViewBag.keyword = input;
+            ViewBag.pagechoose = selectpage;
+            var houses = await _res.GetRoomHouseForUser(ViewBag.keyword,priceRent);
+            var query = await PagingList<RoomHouse>.CreateAsync(houses, ViewBag.pagechoose, pageIndex);
+            return View(query);
         }
         
         public IActionResult Privacy()

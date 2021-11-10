@@ -1,0 +1,75 @@
+﻿@model RentHouse.Models.ViewModel.RoomVM
+
+@{
+    ViewData["Title"] = "EditRoom";
+    Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
+}
+
+<h1>EditRoom</h1>
+
+<h4>House</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditRoom" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="roomHouse.Id" />
+            <div class="form-group">
+                <label asp-for="roomHouse.HouseId" class="control-label"></label>
+                <input asp-for="roomHouse.HouseId" class="form-control" />
+                <span asp-validation-for="roomHouse.HouseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="roomHouse.RoomNumber" class="control-label"></label>
+                <input asp-for="roomHouse.RoomNumber" class="form-control" />
+                <span asp-validation-for="roomHouse.RoomNumber" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="roomHouse.RoomSize" class="control-label"></label>
+                <input asp-for="roomHouse.RoomSize" class="form-control" />
+                <span asp-validation-for="roomHouse.RoomSize" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="roomHouse.Windowns" class="control-label"></label>
+                <input asp-for="roomHouse.Windowns" class="form-control" />
+                <span asp-validation-for="roomHouse.Windowns" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="roomHouse.PriceRent" class="control-label"></label>
+                <input asp-for="roomHouse.PriceRent" class="form-control" />
+                <span asp-validation-for="roomHouse.PriceRent" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                 <img src="/img/@Model.roomHouse.UrlImg" /> 
+                <label asp-for="roomHouse.UrlImg" class="control-label"></label>
+                <input asp-for="roomHouse.UrlImg" class="form-control" readonly/>
+                <span asp-validation-for="roomHouse.UrlImg" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Upload Imgae</label>      
+                <input type="file"  id="file" name="file" class="form-control" />
+            </div>
+            @if(Model.imageUploadOfRooms!=null){
+                foreach(var item in Model.imageUploadOfRooms)
+                    {
+                 <img style="width:300px;height:120px;margin-bottom:100px;" src="/img/@item.Image" />
+                }
+           }
+            <div class="form-group">
+                <label class="control-label">Upload Sub Imgae</label>      
+                <input type="file"  id="files" name="files" class="form-control" multiple/>    
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

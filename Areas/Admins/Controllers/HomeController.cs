@@ -18,12 +18,17 @@ namespace RentHouse.Areas.Admins.Controllers
             _res = res;
         }
 
-        public async Task<IActionResult> Index(int pageIndex = 1, [FromQuery(Name = ("input"))] string input = "")
+        public async Task<IActionResult> Index(int pageIndex = 1, [FromQuery(Name = ("input"))] string input = "", int selectpage=4)
 
         {
+            if (selectpage <= 0)
+            {
+                selectpage = 4;
+            }
             ViewBag.keyword = input;
+            ViewBag.pagechoose = selectpage;
             var houses = await _res.GetHouse(ViewBag.keyword);
-            var query = await PagingList<House>.CreateAsync(houses,2,pageIndex);
+            var query = await PagingList<House>.CreateAsync(houses, ViewBag.pagechoose, pageIndex);
             return View(query);
         }
         public async Task<IActionResult> CreateHouse()
@@ -100,18 +105,22 @@ namespace RentHouse.Areas.Admins.Controllers
             }
             return false;
         }
-        public async Task<IActionResult> EditHouse(int id)
+        public async Task<IActionResult> EditHouse(string id)
         {
-            House house = await _res.GetHouseById(id);
+            if (id == null||int.TryParse(id,out int ds)==false)
+            {
+                return BadRequest();
+            }
+            House house = await _res.GetHouseById(int.Parse(id));
+            if (house==null)
+            {
+                return NotFound();
+            }
             HouseVM houseVM = new HouseVM();
             ICollection<ImageUpload> ImageUpload = await _res.GetSubImage(house.Id);
             houseVM.house = house;
             houseVM.imageUploads = ImageUpload;
-            if(house == null)
-            {
-                TempData["Error"] = "Not Found house,please refresh page";
-                return RedirectToAction("Index");
-            }
+            
             return View(houseVM);
         }
         [HttpPost]
@@ -189,6 +198,10 @@ namespace RentHouse.Areas.Admins.Controllers
         [HttpPost,ActionName("DeleteHouse")]
         public async Task<IActionResult> DeleteHouse(int id)
         {
+            if(id == 0)
+            {
+                return BadRequest();
+            }
             if (await _res.Delete(id))
             {
                 TempData["SuccessFull"] = "Update House SuccessFull";
@@ -198,12 +211,17 @@ namespace RentHouse.Areas.Admins.Controllers
         }
         public async Task<IActionResult> DetailHouse(int id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 TempData["Error"] = "Not Found house,please refresh page";
-                return View();
+                return BadRequest();
             }
+            
             House house = await _res.GetHouseById(id);
+            if(house == null)
+            {
+                return NotFound();
+            }
             ICollection<ImageUpload> ImageUpload = await _res.GetSubImage(house.Id);
             HouseVM houseVM = new HouseVM();
             houseVM.imageUploads = ImageUpload;

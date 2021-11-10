@@ -31,7 +31,8 @@ namespace RentHouse.Areas.User.Controllers
             
             var commentroom = await _res.GetCommentRooms(id);
             roomCommentVM.commentRooms = commentroom;
-            
+            ICollection<ImageUploadOfRoom> imageUploads = await _res.imageUploadOfRooms(id);
+            roomCommentVM.imageUploadOfRooms =  imageUploads;
             return View(roomCommentVM);
         }
         [HttpPost]
@@ -53,7 +54,8 @@ namespace RentHouse.Areas.User.Controllers
 
                 var commentroom = await _res.GetCommentRooms(id);
                 roomCommentVM.commentRooms = commentroom;
-
+                ICollection<ImageUploadOfRoom> imageUploads = await _res.imageUploadOfRooms(id);
+                roomCommentVM.imageUploadOfRooms = imageUploads;
                 return View("DetailRoom", roomCommentVM);
                
             }

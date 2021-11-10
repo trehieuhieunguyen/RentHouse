@@ -21,6 +21,26 @@ namespace RentHouse.Reponsitory
             _db.roomHouses.Add(roomHouse);
             return SaveChange();
         }
+        public bool CreateImageRoom(IList<ImageUploadOfRoom> imageUploadOfRoom)
+        {
+            _db.SubImageOfRoom.AddRange(imageUploadOfRoom);
+            return SaveChange();
+        }
+        public bool RemoveImgae(ICollection<ImageUploadOfRoom> imageUploadOfRoom)
+        {
+            _db.SubImageOfRoom.RemoveRange(imageUploadOfRoom);
+            return SaveChange();
+        }
+        public bool EditRoom(RoomHouse roomhouse)
+        {
+            _db.roomHouses.Update(roomhouse);
+            return SaveChange();
+        }
+        public async Task<ICollection<ImageUploadOfRoom>> imageUploadOfRooms(int id)
+        {
+            var x = await _db.SubImageOfRoom.Where(x => x.RoomHouseId == id).ToListAsync();
+            return x;
+        }
         public bool CheckHouseId(int id)
         {
             var x = _db.houses.Where(x => x.Id == id).ToList();
@@ -61,7 +81,7 @@ namespace RentHouse.Reponsitory
                 return false;
             }
         }
-        public async Task<ICollection<RoomHouse>> GetRoomHouseForUser(string title,string pricerent)
+        public async Task<IOrderedQueryable<RoomHouse>> GetRoomHouseForUser(string title,string pricerent)
         {
             int price = 0;
             if (string.IsNullOrWhiteSpace(title)) title = "";
@@ -85,18 +105,25 @@ namespace RentHouse.Reponsitory
             {
                 price = 100;
             }
-            var x =await _db.roomHouses.Include(x=>x.house).Where(x=>(x.house.City.Contains(title)
+            var x = _db.roomHouses.AsNoTracking().Include(x=>x.house).Where(x=>(x.house.City.Contains(title)
                                                 ||x.house.District.Contains(title)
                                                 ||x.house.Ward.Contains(title)
                                                 ||x.house.NameHourse.Contains(title))
-                                                &&x.PriceRent<=price).Take(6).ToListAsync();
+                                                &&x.PriceRent<=price).OrderByDescending(x=>x.house.NameHourse);
             return x;
         }
+        public async Task<RoomHouse> GetRoomForAdmin(int id)
+        {
+            var x = await _db.roomHouses.FirstOrDefaultAsync(x => x.Id == id);
+            return x;
+        }
+
         public async Task<ICollection<MessageRoom>> GetCommentRooms(int id)
         {
             var x = await _db.messageRooms.Include(x=>x.ApplicationUser).Include(x=>x.RoomHouse).Where(x=>x.RoomHouseId == id).ToListAsync();
             return x;
         }
+       
         public bool SaveComment(MessageRoom comment)
         {
             var x = _db.messageRooms.Update(comment);

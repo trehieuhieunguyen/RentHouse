@@ -4,81 +4,103 @@
 	ViewData["Title"] = "DetailRoom";
 	Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
 }
-
+<style>
+	.ratingStar:hover {
+  background-color: yellow;
+}
+</style>
 <h1>DetailRoom</h1>
 <div class="container bootdey mt-5">
 	<div class="row">
 		<div class="col">
-		<section class="panel">
-			<div class="panel-body">
-				<div class="col">
-					<div class="pro-img-details">
-						<img src="/img/@Model.roomHouse.UrlImg" alt="">
-					</div>
-
-				</div>
-				<div class="col">
-					<h4 class="pro-d-title mt-2 font-weight-bold">
-						<a href="#" class="">
-						Information about House @Model.roomHouse.house.NameHourse.ToUpper()
-						</a>
-					</h4>
-					<div class="product_meta">
-						<span class="posted_in"> <strong>Where:</strong> <a rel="tag" href="#">@Model.roomHouse.house.City</a>, <a rel="tag" href="#">@Model.roomHouse.house.District</a>></span>
-						<span class="tagged_as"><strong>Ward:</strong> <a rel="tag" href="#">@Model.roomHouse.house.Ward</a></span>
-					</div>
-					<div class="m-bot15"> <strong>Price : </strong> @*<span class="amount-old">@Model.roomHouse.PriceRent</span> *@ <span class="pro-price"> $@Model.roomHouse.PriceRent</span></div>
-					<p>
-						<form asp-area="User" asp-controller="Payment" asp-action="PaypalCheckout" asp-route-id="@Model.roomHouse.Id">
-							<input type="submit" value="PayPal" class="btn btn-danger" />
-						</form>
-					</p>
-				</div>
-			</div>
-		</section>
-	</div>
-	<div class="col">
-		<section class="content-item" id="comments">
-			<div class="container">
-				<div class="row">
+			<section class="panel">
+				<div class="panel-body">
 					<div class="col">
-						<form asp-action="CommitMessage" asp-route-id="@Model.roomHouse.Id">
-							<h3 class="pull-left">New Comment</h3>
-							<button type="submit" class="btn btn-normal pull-right bg-primary">Submit</button>
-							<fieldset>
-								<div class="row">
-									@* <div class="col-sm-3 col-lg-2 hidden-xs">
-										<img class="img-responsive" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
-										</div>*@
-									<div class="form-group col-xs-12 col-sm-9 col-lg-10">
-										<textarea class="form-control" id="message" name="message" placeholder="Your message" required=""></textarea>
+						<div class="pro-img-details">
+							<img src="/img/@Model.roomHouse.UrlImg" alt="">
+						</div>
+
+					</div>
+					<div class="col">
+						<h4 class="pro-d-title mt-2 font-weight-bold">
+							<a href="#" class="">
+								Information about House @Model.roomHouse.house.NameHourse.ToUpper()
+							</a>
+						</h4>
+						<div class="product_meta">
+							<span class="posted_in"> <strong>Where:</strong> <a rel="tag" href="#">@Model.roomHouse.house.City</a>, <a rel="tag" href="#">@Model.roomHouse.house.District</a>></span>
+							<span class="tagged_as"><strong>Ward:</strong> <a rel="tag" href="#">@Model.roomHouse.house.Ward</a></span>
+						</div>
+						<div class="m-bot15"> <strong>Price : </strong> @*<span class="amount-old">@Model.roomHouse.PriceRent</span> *@ <span class="pro-price"> $@Model.roomHouse.PriceRent</span></div>
+						<p>
+							<form asp-area="User" asp-controller="Payment" asp-action="PaypalCheckout" asp-route-id="@Model.roomHouse.Id">
+								<input type="submit" value="PayPal" class="btn btn-danger" />
+							</form>
+						</p>
+					</div>
+					@if(Model.imageUploadOfRooms!=null){
+						foreach(var image in Model.imageUploadOfRooms){
+								 {
+								 <img style="width:250px;height:150px;margin-bottom:30px;" src="/img/@image.Image" />
+								}
+							}
+					}
+					
+				</div>
+			</section>
+		</div>
+		<div class="col">
+			<section class="content-item" id="comments">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<form asp-action="CommitMessage" asp-route-id="@Model.roomHouse.Id">
+								<h3 class="pull-left">New Comment</h3>
+								<button type="submit" class="btn btn-normal pull-right bg-primary">Submit</button>
+								<fieldset>
+									<div class="row">
+										@* <div class="col-sm-3 col-lg-2 hidden-xs">
+											<img class="img-responsive" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+											</div>*@
+										<div class="form-group col-xs-12 col-sm-9 col-lg-10">
+											<textarea class="form-control" id="message" name="message" placeholder="Your message" required=""></textarea>
+										</div>
+										<div class="form-group">
+											<span class="text-warning">
+												<i class="ratingStar fas fa-star"></i>
+												<i class="ratingStar fas fa-star"></i>
+												<i class="ratingStar far fa-star"></i>
+												<i class="ratingStar far fa-star"></i>
+												<i class="ratingStar far fa-star"></i>
+											</span>
+										</div>
+									</div>
+								</fieldset>
+							</form>
+
+							<h3>Comment @Model.commentRooms.Count</h3>
+							<!-- COMMENT 1 - START -->
+							@foreach (var cm in Model.commentRooms)
+							{
+
+								<div class="media">
+									@*email*@
+									<div class="media-body">
+										<h4 class="media-heading">@cm.ApplicationUser.Email</h4>
+										<p>@cm.Text</p>
+										<ul class="list-unstyled list-inline media-detail pull-left">
+											<li><i class="fa fa-calendar"></i>@cm.UpdateTime</li>
+										</ul>
 									</div>
 								</div>
-							</fieldset>
-						</form>
-
-						<h3>Comment @Model.commentRooms.Count</h3>
-						<!-- COMMENT 1 - START -->
-						@foreach (var cm in Model.commentRooms)
-						{
-
-							<div class="media">
-								@*email*@
-								<div class="media-body">
-									<h4 class="media-heading">@cm.ApplicationUser.Email</h4>
-									<p>@cm.Text</p>
-									<ul class="list-unstyled list-inline media-detail pull-left">
-										<li><i class="fa fa-calendar"></i>@cm.UpdateTime</li>
-									</ul>
-								</div>
-							</div>
-						}
-						<!-- COMMENT 1 - END -->
+							}
+							
+							<!-- COMMENT 1 - END -->
+						</div>
 					</div>
 				</div>
-			</div>
-		</section>
-	</div>
+			</section>
+		</div>
 	</div>
 </div>
 <div>
