@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "U4xJtKK8VKHgA/Jh4k9d+2jgloqLWetsPl/+ssF6kwA=",
+  "Hash": "ui5jXM4HwHrkcZQhdX8Hf2IO0+b7CR84pvQBOxCVj4w=",
   "Source": "RentHouse",
   "BasePath": "_content/RentHouse",
   "Mode": "Default",
@@ -1953,6 +1953,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\img\\tải xuống (1).jfif"
+    },
+    {
+      "Identity": "C:\\Users\\ASUS\\source\\repos\\RentHouse\\RentHouse\\wwwroot\\img\\tải xuống (2).jfif",
+      "SourceId": "RentHouse",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ASUS\\source\\repos\\RentHouse\\RentHouse\\wwwroot\\",
+      "BasePath": "_content/RentHouse",
+      "RelativePath": "img/tải xuống (2).jfif",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\tải xuống (2).jfif"
     },
     {
       "Identity": "C:\\Users\\ASUS\\source\\repos\\RentHouse\\RentHouse\\wwwroot\\img\\tải xuống (3).jfif",

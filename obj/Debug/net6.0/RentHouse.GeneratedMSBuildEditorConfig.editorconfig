@@ -110,6 +110,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/User/Views/Home/DetailHouse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVXNlclxWaWV3c1xIb21lXERldGFpbEhvdXNlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/User/Views/Home/DetailRoom.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVXNlclxWaWV3c1xIb21lXERldGFpbFJvb20uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

@@ -65,6 +65,7 @@ namespace RentHouse.Areas.Admins.Controllers
                                 Name = roomHouse.house.NameHourse
                             };
                             RoomVM roomVM = new RoomVM();
+                           
                             roomVM.formFiles = fileList;
                             roomVM.imageUploadOfRoom = imageUploadOfRoom;
                             var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", roomHouse.UrlImg);
@@ -141,6 +142,7 @@ namespace RentHouse.Areas.Admins.Controllers
             roomHouse.PriceRent = roomVM.roomHouse.PriceRent;
             roomHouse.RoomNumber = roomVM.roomHouse.RoomNumber;
             roomHouse.RoomSize = roomVM.roomHouse.RoomSize;
+            roomHouse.Windowns = roomVM.roomHouse.Windowns;
             roomHouse.StatusRent = roomVM.roomHouse.StatusRent;
             if (file != null)
             {

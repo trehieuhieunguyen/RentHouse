@@ -12,9 +12,11 @@ namespace RentHouse.Areas.User.Controllers
     public class HomeController : Controller
     {
         private readonly IRoomReponsitory _res;
-        public HomeController(IRoomReponsitory res)
+        private readonly IHouseReponsitory _resHouse;
+        public HomeController(IRoomReponsitory res, IHouseReponsitory resHouse)
         {
             _res = res;
+            _resHouse = resHouse;
         }
 
         public async Task<IActionResult> Index( [FromQuery(Name = ("input"))] string input = "", string priceRent="")
@@ -60,6 +62,25 @@ namespace RentHouse.Areas.User.Controllers
                
             }
             return RedirectToAction("DetailRoom", id);
+        }
+        public async Task<IActionResult> DetailHouse(int id)
+        {
+            if (id == 0)
+            {
+                TempData["Error"] = "Not Found house,please refresh page";
+                return BadRequest();
+            }
+
+            House house = await _resHouse.GetHouseById(id);
+            if (house == null)
+            {
+                return NotFound();
+            }
+            ICollection<ImageUpload> ImageUpload = await _resHouse.GetSubImage(house.Id);
+            HouseVM houseVM = new HouseVM();
+            houseVM.imageUploads = ImageUpload;
+            houseVM.house = house;
+            return View(houseVM);
         }
     }
 }

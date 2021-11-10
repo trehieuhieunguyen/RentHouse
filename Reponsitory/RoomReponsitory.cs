@@ -138,7 +138,7 @@ namespace RentHouse.Reponsitory
         {
             if (title == ""||title==null)
             {
-                var x = _db.roomHouses.AsNoTracking().OrderBy(x => x.Id);
+                var x = _db.roomHouses.AsNoTracking().Include(x=>x.house).OrderByDescending(x => x.house.TimeUpdate);
                 return x;
             }
             else

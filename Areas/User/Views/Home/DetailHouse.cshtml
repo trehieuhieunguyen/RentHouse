@@ -1,0 +1,49 @@
+﻿@model RentHouse.Models.ViewModel.HouseVM
+
+@{
+    ViewData["Title"] = "DetailHouse";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+<h1>DetailHouse</h1>
+
+<div>
+    <h4>House</h4>
+    <hr />
+<div class="container bootdey mt-5">
+	<div class="row">
+		<div class="col">
+			<section class="panel">
+				<div class="panel-body">
+					<div class="col">
+						<div class="pro-img-details">
+							<img src="/img/@Model.house.ImgUrl" alt="">
+						</div>
+
+					</div>
+					<div class="col">
+						<h4 class="pro-d-title mt-2 font-weight-bold">
+							<a class="">
+								Information about House @Model.house.NameHourse.ToUpper()
+							</a>
+						</h4>
+						<div class="product_meta">
+							<span class="posted_in"> <strong>Where:</strong> <a rel="tag" href="#">@Model.house.City</a>, <a rel="tag" href="#">@Model.house.District</a>></span>
+							<span class="tagged_as"><strong>Ward:</strong> <a rel="tag" href="#">@Model.house.Ward</a></span>
+						</div>
+					</div>
+					@if (Model.imageUploads != null)
+					{
+						foreach (var image in Model.imageUploads)
+						{
+							{
+								<img style="width:250px;height:150px;margin-bottom:30px;" src="/img/@image.Image" />
+							}
+						}
+					}
+
+				</div>
+			</section>
+		</div>
+	</div>
+</div>

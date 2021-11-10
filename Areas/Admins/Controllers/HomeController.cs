@@ -52,6 +52,11 @@ namespace RentHouse.Areas.Admins.Controllers
                 //    ModelState.AddModelError("NameHourse", "Please Enter Length > 5");
                 //    return View(house);
                 //}
+                if (house.AllRoom <= 0)
+                {
+                    ModelState.AddModelError("AllRoom", "Please Enter Number > 0");
+                    return View();
+                }
                 if (await _res.CreateHouse(house))
                 {
                     HouseVM houseVM = new HouseVM();
@@ -133,6 +138,11 @@ namespace RentHouse.Areas.Admins.Controllers
             hou.District = housevm.house.District;
             hou.Ward = housevm.house.Ward;
             hou.City = housevm.house.City;
+            if (housevm.house.AllRoom <= 0)
+            {
+                ModelState.AddModelError("house.AllRoom", "Please Enter Number > 0");
+                return View(housevm);
+            }
             hou.AllRoom = housevm.house.AllRoom;
             hou.TimeUpdate = DateTime.Now;
             if (file != null)

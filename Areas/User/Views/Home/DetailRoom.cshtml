@@ -6,8 +6,8 @@
 }
 <style>
 	.ratingStar:hover {
-  background-color: yellow;
-}
+		background-color: yellow;
+	}
 </style>
 <h1>DetailRoom</h1>
 <div class="container bootdey mt-5">
@@ -23,13 +23,18 @@
 					</div>
 					<div class="col">
 						<h4 class="pro-d-title mt-2 font-weight-bold">
-							<a href="#" class="">
+							<a asp-area="User" asp-controller="Home" asp-action="DetailHouse" asp-route-id="@Model.roomHouse.HouseId" class="">
 								Information about House @Model.roomHouse.house.NameHourse.ToUpper()
 							</a>
 						</h4>
 						<div class="product_meta">
 							<span class="posted_in"> <strong>Where:</strong> <a rel="tag" href="#">@Model.roomHouse.house.City</a>, <a rel="tag" href="#">@Model.roomHouse.house.District</a>></span>
 							<span class="tagged_as"><strong>Ward:</strong> <a rel="tag" href="#">@Model.roomHouse.house.Ward</a></span>
+						</div>
+						<div class="product_meta">
+							<span class="posted_in"> <strong>RoomNumber:</strong> <a rel="tag" href="#">@Model.roomHouse.RoomNumber</a></span>
+							<span class="tagged_as"><strong>RoomSize:</strong> <a rel="tag" href="#">@Model.roomHouse.RoomSize</a></span>
+							<span class="tagged_as"><strong>Windowns:</strong> <a rel="tag" href="#">@Model.roomHouse.Windowns</a></span>
 						</div>
 						<div class="m-bot15"> <strong>Price : </strong> @*<span class="amount-old">@Model.roomHouse.PriceRent</span> *@ <span class="pro-price"> $@Model.roomHouse.PriceRent</span></div>
 						<p>
@@ -38,14 +43,16 @@
 							</form>
 						</p>
 					</div>
-					@if(Model.imageUploadOfRooms!=null){
-						foreach(var image in Model.imageUploadOfRooms){
-								 {
-								 <img style="width:250px;height:150px;margin-bottom:30px;" src="/img/@image.Image" />
-								}
+					@if (Model.imageUploadOfRooms != null)
+					{
+						foreach (var image in Model.imageUploadOfRooms)
+						{
+							{
+								<img style="width:250px;height:150px;margin-bottom:30px;" src="/img/@image.Image" />
 							}
+						}
 					}
-					
+
 				</div>
 			</section>
 		</div>
@@ -94,7 +101,7 @@
 									</div>
 								</div>
 							}
-							
+
 							<!-- COMMENT 1 - END -->
 						</div>
 					</div>
