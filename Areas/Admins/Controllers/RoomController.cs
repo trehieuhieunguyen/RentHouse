@@ -35,7 +35,7 @@ namespace RentHouse.Areas.Admins.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateRoom(RoomHouse roomHouse, IFormFile file,IList<IFormFile> fileList)
+        public async Task<IActionResult> CreateRoom(RoomHouse roomHouse, IFormFile file, IList<IFormFile> fileList)
         {
             if (file != null)
             {
@@ -52,7 +52,27 @@ namespace RentHouse.Areas.Admins.Controllers
                 {
                     if (!_res.CheckNumberRoom(roomHouse.HouseId, roomHouse.RoomNumber))
                     {
-                        ModelState.AddModelError("RoomNumber", "Don't Have Exsits");
+                        ModelState.AddModelError("RoomNumber", "Please Enter Number Exists");
+                        return View();
+                    }
+                    if (roomHouse.RoomSize <= 0)
+                    {
+                        ModelState.AddModelError("RoomSize", "Please Enter Number > 0");
+                        return View();
+                    }
+                    if (roomHouse.Windowns < 0)
+                    {
+                        ModelState.AddModelError("Windowns", "Please Enter Number > 0");
+                        return View();
+                    }
+                    if (roomHouse.PriceRent <= 0)
+                    {
+                        ModelState.AddModelError("PriceRent", "Please Enter Number > 0");
+                        return View();
+                    }
+                    if (file == null)
+                    {
+                        ModelState.AddModelError("UrlImg", "Please Enter File Image");
                         return View();
                     }
                     else
@@ -65,7 +85,7 @@ namespace RentHouse.Areas.Admins.Controllers
                                 Name = roomHouse.house.NameHourse
                             };
                             RoomVM roomVM = new RoomVM();
-                           
+
                             roomVM.formFiles = fileList;
                             roomVM.imageUploadOfRoom = imageUploadOfRoom;
                             var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", roomHouse.UrlImg);
@@ -119,7 +139,7 @@ namespace RentHouse.Areas.Admins.Controllers
             {
                 return BadRequest();
             }
-           var roomHouse = await _res.GetRoomForAdmin(id);
+            var roomHouse = await _res.GetRoomForAdmin(id);
             if (roomHouse == null)
             {
                 return NotFound();
@@ -129,7 +149,7 @@ namespace RentHouse.Areas.Admins.Controllers
             roomVM.roomHouse = roomHouse;
             roomVM.imageUploadOfRooms = imageUploads;
             return await Task.Run(() => View(roomVM));
-            
+
         }
         [HttpPost]
         public async Task<IActionResult> EditRoom(RoomVM roomVM, IList<IFormFile> files, IFormFile? file)
@@ -144,43 +164,74 @@ namespace RentHouse.Areas.Admins.Controllers
             roomHouse.RoomSize = roomVM.roomHouse.RoomSize;
             roomHouse.Windowns = roomVM.roomHouse.Windowns;
             roomHouse.StatusRent = roomVM.roomHouse.StatusRent;
-            if (file != null)
+            if (!_res.CheckHouseId(roomHouse.HouseId))
             {
-                roomHouse.UrlImg = file.FileName;
+                ModelState.AddModelError("roomHouse.HouseId", "Don't Have Exsits");
+                return View(roomVM);
             }
             else
             {
-                roomHouse.UrlImg = roomVM.roomHouse.UrlImg;
-            }
-            roomVM.roomHouse = roomHouse;
-            if (files.Count != 0)
-            {
-                foreach (var filex in files)
+                if (!_res.CheckNumberRoom(roomHouse.HouseId, roomHouse.RoomNumber))
                 {
-                    ImageUploadOfRoom imageUpload = new ImageUploadOfRoom();
-                    imageUpload.Image = filex.FileName;
-                    imageUpload.RoomHouseId = roomVM.roomHouse.Id;
-                    imageUpload.Name = "HadCheck";
-                    imageUploadOfs.Add(imageUpload);
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", filex.FileName);
-                    using (var fileSteam = new FileStream(path, FileMode.Create))
-                    {
-                        filex.CopyTo(fileSteam);
-                    }
-
+                    ModelState.AddModelError("roomHouse.RoomNumber", "Please Enter Number > 0");
+                    return View(roomVM);
                 }
-                 _res.RemoveImgae(imageUploads);
-                 _res.CreateImageRoom(imageUploadOfs);
-                roomVM.imageUploadOfRooms = imageUploadOfs;
-            }
-            else
-            {
-                roomVM.imageUploadOfRooms = imageUploads;
-            }
-            if (!ModelState.IsValid)
-            {
+                if (roomHouse.RoomSize <= 0)
+                {
+                    ModelState.AddModelError("roomHouse.RoomSize", "Please Enter Number > 0");
+                    return View(roomVM);
+                }
+                if (roomHouse.Windowns < 0)
+                {
+                    ModelState.AddModelError("roomHouse.Windowns", "Please Enter Number > 0");
+                    return View(roomVM);
+                }
+                if (roomHouse.PriceRent <= 0)
+                {
+                    ModelState.AddModelError("roomHouse.PriceRent", "Please Enter Number > 0");
+                    return View(roomVM);
+                }
                 
-                    if ( _res.EditRoom(roomHouse))
+            }
+                
+                if (file != null)
+                {
+                    roomHouse.UrlImg = file.FileName;
+                }
+                else
+                {
+                    roomHouse.UrlImg = roomVM.roomHouse.UrlImg;
+                }
+                roomVM.roomHouse = roomHouse;
+
+                if (files.Count != 0)
+                {
+                    foreach (var filex in files)
+                    {
+                        ImageUploadOfRoom imageUpload = new ImageUploadOfRoom();
+                        imageUpload.Image = filex.FileName;
+                        imageUpload.RoomHouseId = roomVM.roomHouse.Id;
+                        imageUpload.Name = "HadCheck";
+                        imageUploadOfs.Add(imageUpload);
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", filex.FileName);
+                        using (var fileSteam = new FileStream(path, FileMode.Create))
+                        {
+                            filex.CopyTo(fileSteam);
+                        }
+
+                    }
+                    _res.RemoveImgae(imageUploads);
+                    _res.CreateImageRoom(imageUploadOfs);
+                    roomVM.imageUploadOfRooms = imageUploadOfs;
+                }
+                else
+                {
+                    roomVM.imageUploadOfRooms = imageUploads;
+                }
+                if (!ModelState.IsValid)
+                {
+
+                    if (_res.EditRoom(roomHouse))
                     {
                         if (file != null)
                         {
@@ -193,40 +244,40 @@ namespace RentHouse.Areas.Admins.Controllers
                         TempData["SuccessFull"] = "Update House SuccessFull";
                         return RedirectToAction("Index");
                     }
-                
-            }
 
-            return View(roomVM);
-        }
-        public async Task<IActionResult> DetailRoom(int id)
-        {
-            if (id == 0)
-            {
-                return BadRequest();
+                }
+
+                return View(roomVM);
             }
-            ICollection<ImageUploadOfRoom> imageUploads = await _res.imageUploadOfRooms(id);
-            RoomHouse roomHouse =await _res.GetRoomForAdmin(id);
-            if(roomHouse == null)
+            public async Task<IActionResult> DetailRoom(int id)
             {
-                return NotFound();
+                if (id == 0)
+                {
+                    return BadRequest();
+                }
+                ICollection<ImageUploadOfRoom> imageUploads = await _res.imageUploadOfRooms(id);
+                RoomHouse roomHouse = await _res.GetRoomForAdmin(id);
+                if (roomHouse == null)
+                {
+                    return NotFound();
+                }
+                RoomVM roomVM = new RoomVM();
+                roomVM.roomHouse = roomHouse;
+                roomVM.imageUploadOfRooms = imageUploads;
+                return View(roomVM);
             }
-            RoomVM roomVM = new RoomVM();
-            roomVM.roomHouse = roomHouse;
-            roomVM.imageUploadOfRooms = imageUploads;
-            return View(roomVM);
-        }
-        [HttpPost]
-        public async Task<IActionResult> DeleteRoom(int id)
-        {
-			if (id == 0)
-			{
-                return BadRequest();
-			}
-            if (await _res.DeleteRoom(id))
+            [HttpPost]
+            public async Task<IActionResult> DeleteRoom(int id)
             {
-                return RedirectToAction("Index");
+                if (id == 0)
+                {
+                    return BadRequest();
+                }
+                if (await _res.DeleteRoom(id))
+                {
+                    return RedirectToAction("Index");
+                }
+                return View();
             }
-            return View();
         }
     }
-}

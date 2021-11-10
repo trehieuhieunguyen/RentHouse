@@ -70,7 +70,7 @@ namespace RentHouse.Reponsitory
         }
         public bool CheckNumberRoom(int houseId,int numberRoom)
         {
-            var x = _db.houses.Where(x => x.Id == houseId && x.AllRoom>numberRoom).ToList();
+            var x = _db.houses.Where(x => x.Id == houseId && x.AllRoom>numberRoom&&numberRoom>0).ToList();
             if (x.Count > 0)
             {
                 return true;

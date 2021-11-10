@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ui5jXM4HwHrkcZQhdX8Hf2IO0+b7CR84pvQBOxCVj4w=",
+  "Hash": "2mesQD4AkizCMbZYn74oVIITVnyn+W31gAtoa/vkeJc=",
   "Source": "RentHouse",
   "BasePath": "_content/RentHouse",
   "Mode": "Default",
@@ -1868,6 +1868,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\img\\kinh-nghiem-tim-phong-tro-gia-re-top-xx-website-t.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\ASUS\\source\\repos\\RentHouse\\RentHouse\\wwwroot\\img\\phong-thuy-phong-tro-1(1).jpg",
+      "SourceId": "RentHouse",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ASUS\\source\\repos\\RentHouse\\RentHouse\\wwwroot\\",
+      "BasePath": "_content/RentHouse",
+      "RelativePath": "img/phong-thuy-phong-tro-1(1).jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\phong-thuy-phong-tro-1(1).jpg"
     },
     {
       "Identity": "C:\\Users\\ASUS\\source\\repos\\RentHouse\\RentHouse\\wwwroot\\img\\phong-tro-da-nang-6.jpg",
