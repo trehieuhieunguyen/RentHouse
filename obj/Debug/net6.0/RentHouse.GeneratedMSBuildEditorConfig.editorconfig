@@ -22,8 +22,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5zXFZpZXdzXEhvbWVcQ3JlYXRlSG91c2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/Admins/Views/Home/DetailAllRoomInHouse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5zXFZpZXdzXEhvbWVcRGV0YWlsQWxsUm9vbUluSG91c2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/Admins/Views/Home/DetailHouse.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5zXFZpZXdzXEhvbWVcRGV0YWlsSG91c2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/Admins/Views/Home/DetailRoomInHouse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5zXFZpZXdzXEhvbWVcRGV0YWlsUm9vbUluSG91c2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/Admins/Views/Home/EditHouse.cshtml]
@@ -82,6 +90,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5zXFZpZXdzXF9WaWV3U3RhcnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/Identity/Pages/Account/ForgotPassword.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxGb3Jnb3RQYXNzd29yZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/Identity/Pages/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -108,6 +120,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/Identity/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/User/Views/Home/CreateHouseForUser.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVXNlclxWaWV3c1xIb21lXENyZWF0ZUhvdXNlRm9yVXNlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/User/Views/Home/DetailHouse.cshtml]

@@ -19,5 +19,7 @@ namespace RentHouse.Reponsitory.IReponsitory
         Task<ICollection<ImageUploadOfRoom>> imageUploadOfRooms(int id);
         bool RemoveImgae(ICollection<ImageUploadOfRoom> imageUploadOfRoom);
         bool EditRoom(RoomHouse roomhouse);
+        bool CheckRoomNumberCreate(int roomnumber, int houseId);
+        bool CheckRoomNumberEdit(int roomnumber, int houseId, int roomId);
     }
 }

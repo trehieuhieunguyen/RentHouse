@@ -1,0 +1,102 @@
+﻿@model RentHouse.Models.ViewModel.RoomInHouseVM
+
+@{
+	ViewData["Title"] = "DetailRoomInHouse";
+	Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
+}
+@if (TempData["Error"] != null)
+{
+	<div class="p-3 mb-2 bg-danger text-white">
+		@TempData["Error"]
+	</div>
+}
+@foreach (var y in Model.roomHouses)
+{
+	<a class="text-decoration-none" asp-action="DetailAllRoomInHouse" asp-route-id="@y.HouseId"><h1>Detail All Room In House</h1></a>
+	break;
+}
+<div class="container">
+	<div class="row">
+		@for (int x = 1; x <= Model.AllRoom; x++)
+		{
+			var check = true;
+
+			foreach (var y in Model.roomHouses)
+			{
+
+				if (x == y.RoomNumber)
+				{
+					check = false;
+					if (y.StatusRent == true)
+					{
+						<div class="col-md-3 m-lg-3">
+							<button class="btn btn-primary btn-sm ml-5 position-absolute" type="button" data-toggle="modal" data-target="#exampleModalCenter2" value="@y.Id"><i class="fas fa-copy"></i></button>
+							<a type="button" asp-area="User" asp-controller="Home" asp-action="DetailRoom" asp-route-id="@y.Id" class="btn btn-danger ml-5" style="width:300px; height:150px;"><i class="fa fa-home" aria-hidden="true" style="width:50%; height:50%;"></i><h1>Room:@x</h1></a>
+
+						</div>
+						Model.roomHouses.Remove(y);
+						break;
+					}
+					else
+					{
+						<div class="col-md-3 m-lg-3">
+							<button class="btn btn-primary btn-sm ml-5 position-absolute" type="button" data-toggle="modal" data-target="#exampleModalCenter2" value="@y.Id"><i class="fas fa-copy"></i></button>
+							<a type="button" asp-area="User" asp-controller="Home" asp-action="DetailRoom" asp-route-id="@y.Id" class="btn btn-success ml-5" style="width:300px; height:150px;"><i class="fa fa-home" aria-hidden="true" style="width:50%; height:50%;"></i><h1>Room:@x</h1></a>
+						</div>
+						Model.roomHouses.Remove(y);
+						break;
+					}
+
+				}
+			}
+			if (check == true)
+			{
+				<div class="col-md-3 m-lg-3">
+					<a type="button" class="btn btn-secondary ml-5" style="width:300px; height:150px;"><i class="fa fa-home" aria-hidden="true" style="width:50%; height:50%;"></i><h1>Room:@x</h1></a>
+				</div>
+			}
+
+		}
+	</div>
+	<div id="exampleModalCenter2" class="modal fade">
+		<div class="modal-dialog modal-confirm">
+			<div class="modal-content">
+				<div class="modal-header flex-column">
+					<h4 class="modal-title w-100">Are you sure?</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				</div>
+				<div class="modal-body">
+					<p>De you pass date to other roomhouse</p>
+				</div>
+				<div class="modal-footer justify-content-center">
+
+					<form asp-action="CloneData" name="myForm">
+
+						<input type="hidden" id="dataroom" name="dataroom" value="" />
+						<input type="text" class="form-control mb-3" id="roomNumber" name="roomNumber" placeholder="RoomNumber" />
+						<span asp-validation-for="@Model.AllRoom" class="text-danger"></span>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+						<input type="submit" value="Sure" class="btn btn-success" onclick="validateForm()" />
+
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@section Scripts{
+<script>
+	$("button").click(function() {
+	var id_remove = $(this).attr('value');
+		console.log(id_remove);
+		   $("#idremove").attr("value", id_remove );
+	var data_room = $(this).attr('value');
+		console.log(data_room);
+		   $("#dataroom").attr("value", data_room );
+	});
+
+</script>
+}
+
+

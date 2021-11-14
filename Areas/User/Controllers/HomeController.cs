@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ReflectionIT.Mvc.Paging;
 using RentHouse.Extensions;
 using RentHouse.Models;
 using RentHouse.Models.ViewModel;
@@ -8,7 +9,7 @@ using RentHouse.Reponsitory.IReponsitory;
 namespace RentHouse.Areas.User.Controllers
 {
     [Area("User")]
-    [Authorize(Roles = "User")]
+    [Authorize(Roles = "User,Admins")]
     public class HomeController : Controller
     {
         private readonly IRoomReponsitory _res;
@@ -19,10 +20,13 @@ namespace RentHouse.Areas.User.Controllers
             _resHouse = resHouse;
         }
 
-        public async Task<IActionResult> Index( [FromQuery(Name = ("input"))] string input = "", string priceRent="")
+        public async Task<IActionResult> Index(int pageIndex = 1, [FromQuery(Name = ("input"))] string input = "", string priceRent = "", int selectpage = 6)
         {
-            var x =await _res.GetRoomHouseForUser(input,priceRent);
-            return View(x);
+            ViewBag.keyword = input;
+            ViewBag.pagechoose = selectpage;
+            var houses = await _res.GetRoomHouseForUser(ViewBag.keyword, priceRent);
+            var query = await PagingList<RoomHouse>.CreateAsync(houses, ViewBag.pagechoose, pageIndex);
+            return View(query);
         }
         public async Task<IActionResult> DetailRoom(int id)
         {
@@ -81,6 +85,88 @@ namespace RentHouse.Areas.User.Controllers
             houseVM.imageUploads = ImageUpload;
             houseVM.house = house;
             return View(houseVM);
+        }
+        public async Task<IActionResult> CreateHouseForUser()
+        {
+            return await Task.Run(() => View());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateHouseForUser(House house, IFormFile file, IList<IFormFile> fileList)
+        {
+            if (file != null)
+            {
+                house.ImgUrl = file.FileName;
+            }
+            house.TimeCreate = DateTime.Now;
+            house.TimeUpdate = DateTime.Now;
+            if (ModelState.IsValid)
+            {
+                //if (house.District.Length < 5)
+                //{
+                //    ModelState.AddModelError("NameHourse", "Please Enter Length > 5");
+                //    return View(house);
+                //}
+                if (house.AllRoom <= 0)
+                {
+                    ModelState.AddModelError("AllRoom", "Please Enter Number > 0");
+                    return View();
+                }
+                if (await _resHouse.CreateHouse(house))
+                {
+                    HouseVM houseVM = new HouseVM();
+                    ImageUpload houseUpload = new ImageUpload()
+                    {
+                        HouseId = house.Id,
+                        Name = house.NameHourse
+                    };
+                    houseVM.formFiles = fileList;
+                    houseVM.imageUpload = houseUpload;
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", house.ImgUrl);
+                    using (var fileSteam = new FileStream(path, FileMode.Create))
+                    {
+                        file.CopyTo(fileSteam);
+                    }
+                    HouseOfUser houseOfUser = new HouseOfUser();
+                    houseOfUser.HouseId = houseUpload.HouseId;
+                    houseOfUser.ApplicationUserId = User.GetUserId();
+                    await _resHouse.CreateHouseOfUser(houseOfUser);
+                    if (await UpdateSubImage(houseVM))
+                    {
+                        TempData["SuccessFull"] = "Create House SuccessFull";
+                        return RedirectToAction("Index");
+                    }
+                }
+            }
+            return View();
+        }
+        public async Task<bool> UpdateSubImage(HouseVM houseVM)
+        {
+            IList<ImageUpload> houseUpload = new List<ImageUpload>();
+            if (houseVM.formFiles != null)
+            {
+                foreach (IFormFile files in houseVM.formFiles)
+                {
+
+                    ImageUpload houseUploadxx = new ImageUpload();
+                    houseUploadxx.Name = houseVM.imageUpload.Name;
+                    houseUploadxx.HouseId = houseVM.imageUpload.HouseId;
+                    houseUploadxx.Image = files.FileName;
+                    var pathImage = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", houseUploadxx.Image);
+                    using (var fileSteam = new FileStream(pathImage, FileMode.Create))
+                    {
+                        files.CopyTo(fileSteam);
+                    }
+                    houseUpload.Add(houseUploadxx);
+
+                }
+
+            }
+            if (await _resHouse.CreateImgae(houseUpload))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

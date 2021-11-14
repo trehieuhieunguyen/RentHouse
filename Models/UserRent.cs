@@ -12,7 +12,7 @@ namespace RentHouse.Models
         [Required]
         [ForeignKey("RoomId")]
         public int RoomId { get; set; }
-        public RoomHouse roomHouse { get; set; }
+        public RoomHouse RoomHouse { get; set; }
 
         [ForeignKey("ApplicationUserId")]
         public string ApplicationUserId { get; set; }

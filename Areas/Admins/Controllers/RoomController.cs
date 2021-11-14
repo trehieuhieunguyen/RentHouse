@@ -41,20 +41,28 @@ namespace RentHouse.Areas.Admins.Controllers
             {
                 roomHouse.UrlImg = file.FileName;
             }
+            roomHouse.UpdateTime= DateTime.Now;
             if (!ModelState.IsValid)
             {
-                if (!_res.CheckHouseId(roomHouse.HouseId))
+                if (!_res.CheckNumberRoom(roomHouse.HouseId, roomHouse.RoomNumber))
                 {
-                    ModelState.AddModelError("HouseId", "Don't Have Exsits");
+                    ModelState.AddModelError("RoomNumber", "Please Enter Number In All Room");
                     return View();
                 }
+                if (_res.CheckRoomNumberCreate(roomHouse.RoomNumber, roomHouse.HouseId) == false)
+                {
+                    ModelState.AddModelError("RoomNumber", "RoomNumber Had Exists");
+                    return View();
+                }
+                if (!_res.CheckHouseId(roomHouse.HouseId))
+                {
+                    ModelState.AddModelError("HouseId", "Don't have exsits");
+                    return View();
+                }
+                
                 else
                 {
-                    if (!_res.CheckNumberRoom(roomHouse.HouseId, roomHouse.RoomNumber))
-                    {
-                        ModelState.AddModelError("RoomNumber", "Please Enter Number Exists");
-                        return View();
-                    }
+                    
                     if (roomHouse.RoomSize <= 0)
                     {
                         ModelState.AddModelError("RoomSize", "Please Enter Number > 0");
@@ -164,9 +172,15 @@ namespace RentHouse.Areas.Admins.Controllers
             roomHouse.RoomSize = roomVM.roomHouse.RoomSize;
             roomHouse.Windowns = roomVM.roomHouse.Windowns;
             roomHouse.StatusRent = roomVM.roomHouse.StatusRent;
+            roomHouse.UpdateTime = DateTime.Now;
             if (!_res.CheckHouseId(roomHouse.HouseId))
             {
                 ModelState.AddModelError("roomHouse.HouseId", "Don't Have Exsits");
+                return View(roomVM);
+            }
+            if (_res.CheckRoomNumberEdit(roomHouse.RoomNumber, roomHouse.HouseId, roomHouse.Id) == false)
+            {
+                ModelState.AddModelError("roomHouse.RoomNumber", "RoomNumber had exists");
                 return View(roomVM);
             }
             else

@@ -14,5 +14,8 @@ namespace RentHouse.Reponsitory.IReponsitory
         Task<ICollection<ImageUpload>> GetSubImage(int id);
         Task<bool> CheckNameHouse(string Name, int Id);
         Task<bool> RemoveImgae(ICollection<ImageUpload> imageUpload);
+        Task<bool> CreateHouseOfUser(HouseOfUser houseOfUser);
+        Task<ICollection<RoomHouse>> getRoomInHouse(int id);
+        Task<bool> CheckNameCreateHouse(string Name);
     }
 }

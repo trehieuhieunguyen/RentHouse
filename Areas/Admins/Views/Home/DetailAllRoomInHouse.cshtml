@@ -1,0 +1,104 @@
+﻿@model IEnumerable<RentHouse.Models.RoomHouse>
+
+
+@{
+	ViewData["Title"] = "DetailRoomInHouse";
+	Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
+}
+@if (TempData["Error"] != null)
+{
+	<div class="p-3 mb-2 bg-danger text-white">
+		@TempData["Error"]
+	</div>
+}
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				house
+			</th>
+			<th>
+				RoomNumber
+			</th>
+			<th>
+				RoomSize
+			</th>
+			<th>
+				Windowns
+			</th>
+			<th>
+				PriceRent
+			</th>
+			<th>
+				StatusRent
+			</th>
+			<th>
+				UrlImg
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.house.City)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.RoomNumber)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.RoomSize)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Windowns)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.PriceRent)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.StatusRent)
+				</td>
+				<td>
+					<img style="width:100px;height:40px;" src="/img/@item.UrlImg" />
+				</td>
+				<td>
+					<a asp-controller="Room" asp-action="EditRoom" asp-route-id="@item.Id">Edit</a> |
+					<a asp-controller="Room" asp-action="DetailRoom" asp-route-id="@item.Id">Details</a> |
+					@if (item.StatusRent)
+					{
+						<button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="modal" data-target="#exampleModalCenter" value="@item.Id">HadRent</button>
+					}
+					else
+					{
+						<button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="modal" data-target="#exampleModalCenter" value="@item.Id">Nobody</button>
+					}
+				</td>
+			</tr>
+			<div id="exampleModalCenter" class="modal fade">
+				<div class="modal-dialog modal-confirm">
+					<div class="modal-content">
+						<div class="modal-header flex-column">
+							<h4 class="modal-title w-100">Are you sure?</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						</div>
+						<div class="modal-body">
+							<p>Do you really want to delete these records? This process cannot be undone.</p>
+						</div>
+						<div class="modal-footer justify-content-center">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+							<form asp-action="DeleteRoom">
+
+								<input type="hidden" id="idremove" name="Id" value="" />
+
+								<input type="submit" value="Sure" class="btn btn-danger" />
+
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		}
+	</tbody>
+</table>

@@ -21,5 +21,6 @@ namespace RentHouse.Models
         public DateTime TimeUpdate { get; set; }
         public int AllRoom { get; set; }
         public bool isDeleted { get; set; }
+       
     }
 }

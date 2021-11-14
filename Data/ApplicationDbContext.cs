@@ -20,5 +20,6 @@ namespace RentHouse.Data
         public DbSet<ImageUpload> imageUploads { get; set; }
         public DbSet<MessageRoom> messageRooms { get; set; }
         public DbSet<ImageUploadOfRoom> SubImageOfRoom { get; set; }
+        public DbSet<HouseOfUser> houseOfUser { get; set; }
     }
 }

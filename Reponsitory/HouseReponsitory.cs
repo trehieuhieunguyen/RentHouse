@@ -18,7 +18,11 @@ namespace RentHouse.Reponsitory
             _db.houses.Add(house);
             return await SaveChange();
         }
-
+        public async Task<bool> CreateHouseOfUser(HouseOfUser houseOfUser)
+        {
+            _db.houseOfUser.Add(houseOfUser);
+            return await SaveChange();
+        }
         public async Task<bool> CreateImgae(IList<ImageUpload> imageUpload)
         {
             _db.imageUploads.AddRange(imageUpload);
@@ -78,6 +82,19 @@ namespace RentHouse.Reponsitory
             }
             return true;    
         }
+        public async Task<bool> CheckNameCreateHouse(string Name)
+        {
+            List<House> house = await _db.houses.ToListAsync();
+            foreach (var houses in house)
+            {
+               
+                    if (houses.NameHourse == Name)
+                    {
+                        return false;
+                    }
+            }
+            return true;
+        }
         public async Task<House> GetHouseById(int id)
         {
             return await _db.houses.FirstOrDefaultAsync(x => x.Id == id);
@@ -89,6 +106,11 @@ namespace RentHouse.Reponsitory
         public async Task<bool> SaveChange()
         {
             return await _db.SaveChangesAsync()>0;
+        }
+        public async Task<ICollection<RoomHouse>> getRoomInHouse(int id)
+        {
+            var x =await _db.roomHouses.Include(x => x.house).Where(x=>x.HouseId == id).ToListAsync();
+            return x;
         }
     }
 }

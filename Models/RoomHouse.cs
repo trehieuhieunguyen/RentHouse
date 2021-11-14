@@ -23,5 +23,6 @@ namespace RentHouse.Models
         public double PriceRent { get; set; }
         public bool StatusRent { get; set; }
         public string UrlImg { get; set; }
+        public DateTime UpdateTime { get; set; }
     }
 }

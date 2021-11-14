@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReflectionIT.Mvc.Paging;
+using RentHouse.Extensions;
 using RentHouse.Models;
 using RentHouse.Models.ViewModel;
 using RentHouse.Reponsitory.IReponsitory;
@@ -13,9 +14,11 @@ namespace RentHouse.Areas.Admins.Controllers
     {       
 
         private readonly IHouseReponsitory _res;
-        public HomeController(IHouseReponsitory res)
+        private readonly IRoomReponsitory _resroom;
+        public HomeController(IHouseReponsitory res,IRoomReponsitory resroom)
         {
             _res = res;
+            _resroom = resroom;
         }
 
         public async Task<IActionResult> Index(int pageIndex = 1, [FromQuery(Name = ("input"))] string input = "", int selectpage=4)
@@ -52,6 +55,11 @@ namespace RentHouse.Areas.Admins.Controllers
                 //    ModelState.AddModelError("NameHourse", "Please Enter Length > 5");
                 //    return View(house);
                 //}
+                if (await _res.CheckNameCreateHouse(house.NameHourse) == false)
+                {
+                    ModelState.AddModelError("NameHourse", "Already Exist");
+                    return View();
+                }
                 if (house.AllRoom <= 0)
                 {
                     ModelState.AddModelError("AllRoom", "Please Enter Number > 0");
@@ -72,6 +80,10 @@ namespace RentHouse.Areas.Admins.Controllers
                     {
                         file.CopyTo(fileSteam);
                     }
+                    HouseOfUser houseOfUser = new HouseOfUser();
+                    houseOfUser.HouseId = houseUpload.HouseId;
+                    houseOfUser.ApplicationUserId = User.GetUserId();
+                    await _res.CreateHouseOfUser(houseOfUser);
                     if (await UpdateSubImage(houseVM))
                     {
                         TempData["SuccessFull"] = "Create House SuccessFull";
@@ -238,6 +250,96 @@ namespace RentHouse.Areas.Admins.Controllers
             houseVM.house = house;
             return View(houseVM);
         }
-        
+        public async Task<IActionResult> DetailRoomInHouse(int id)
+        {
+            if(id == 0)
+            {
+                TempData["Error"] = "Not Found house,please refresh page";
+                return BadRequest();
+            }
+            RoomInHouseVM roomInHouseVM = new RoomInHouseVM();
+            var house = await _res.GetHouseById(id);
+            roomInHouseVM.AllRoom = house.AllRoom;
+            var x = await _res.getRoomInHouse(id);
+            roomInHouseVM.roomHouses = x;
+            roomInHouseVM.roomHousesModal = x;
+            if(x == null)
+            {
+                return NotFound();
+            }
+            return View(roomInHouseVM);
+        }
+        public async Task<IActionResult> DetailAllRoomInHouse(int id)
+        {
+            if (id == 0)
+            {
+                TempData["Error"] = "Not Found house,please refresh page";
+                return BadRequest();
+            }
+            var x = await _res.getRoomInHouse(id);
+            if (x == null)
+            {
+                return NotFound();
+            }
+            return View(x);
+        }
+
+        [HttpPost,ActionName("DeleteRoom")]
+        public async Task<IActionResult> DeleteRoom(int id)
+        {
+
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            var x =await _resroom.GetRoomHouseForUserbyId(id);
+            if (await _resroom.DeleteRoom(id))
+            {
+                
+                return RedirectToAction("DetailRoomInHouse",new { id=x.HouseId });
+            }
+            return View("DetailRoomInHouse", new { id = x.HouseId });
+        }
+        [HttpPost]
+        public async Task<IActionResult> CloneData(int dataroom, int roomNumber)
+        {
+            TempData["Error"] = "";
+            var x =await _resroom.GetRoomForAdmin(dataroom);
+            if (roomNumber == 0)
+            {
+                TempData["Error"] = "Please Enter Number Room Create";
+                return RedirectToAction("DetailRoomInHouse", new { id = x.HouseId });
+            }
+            if (_resroom.CheckRoomNumberCreate(roomNumber, x.HouseId) == false)
+            {
+                TempData["Error"]= "RoomNumber Already Create";
+                return RedirectToAction("DetailRoomInHouse", new { id = x.HouseId });
+            }
+            RoomHouse roomHouse = new RoomHouse();
+            roomHouse.PriceRent = x.PriceRent;
+            roomHouse.RoomNumber = roomNumber;
+            roomHouse.HouseId = x.HouseId;
+            roomHouse.Windowns = x.Windowns;
+            roomHouse.UpdateTime = DateTime.Now;
+            roomHouse.RoomSize = x.RoomSize;
+            roomHouse.UrlImg = x.UrlImg;
+            ICollection<ImageUploadOfRoom> imageUploadOfRooms = await _resroom.imageUploadOfRooms(dataroom);
+            IList<ImageUploadOfRoom> imageUploadOfRoomsNew = new List<ImageUploadOfRoom>();
+            if (_resroom.CreateRoom(roomHouse))
+            {
+                foreach (var image in imageUploadOfRooms)
+            {
+                ImageUploadOfRoom imageUploadOfRoom = new ImageUploadOfRoom();
+                imageUploadOfRoom.Image = image.Image;
+                imageUploadOfRoom.RoomHouseId = roomHouse.Id;
+                imageUploadOfRoom.Name = image.Name;
+                imageUploadOfRoomsNew.Add(imageUploadOfRoom);
+            }
+            
+                _resroom.CreateImageRoom(imageUploadOfRoomsNew);
+              return  RedirectToAction("DetailRoomInHouse", new { id = x.HouseId });
+            }
+            return BadRequest();
+        }
     }
 }

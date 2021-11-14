@@ -17,7 +17,7 @@ namespace RentHouse.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0-rc.2.21480.5")
+                .HasAnnotation("ProductVersion", "6.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -296,6 +296,33 @@ namespace RentHouse.Data.Migrations
                     b.ToTable("houses");
                 });
 
+            modelBuilder.Entity("RentHouse.Models.HouseOfUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("HouseId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("HouseId");
+
+                    b.ToTable("houseOfUser");
+                });
+
             modelBuilder.Entity("RentHouse.Models.ImageUpload", b =>
                 {
                     b.Property<int>("Id")
@@ -408,6 +435,9 @@ namespace RentHouse.Data.Migrations
                     b.Property<bool>("StatusRent")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("UrlImg")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -465,17 +495,17 @@ namespace RentHouse.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoomId")
+                    b.Property<int>("RoomHouseId")
                         .HasColumnType("int");
 
-                    b.Property<int>("roomHouseId")
+                    b.Property<int>("RoomId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("roomHouseId");
+                    b.HasIndex("RoomHouseId");
 
                     b.ToTable("UserRent");
                 });
@@ -569,6 +599,25 @@ namespace RentHouse.Data.Migrations
                     b.Navigation("userRent");
                 });
 
+            modelBuilder.Entity("RentHouse.Models.HouseOfUser", b =>
+                {
+                    b.HasOne("RentHouse.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RentHouse.Models.House", "house")
+                        .WithMany()
+                        .HasForeignKey("HouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("house");
+                });
+
             modelBuilder.Entity("RentHouse.Models.ImageUpload", b =>
                 {
                     b.HasOne("RentHouse.Models.House", "house")
@@ -640,15 +689,15 @@ namespace RentHouse.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RentHouse.Models.RoomHouse", "roomHouse")
+                    b.HasOne("RentHouse.Models.RoomHouse", "RoomHouse")
                         .WithMany()
-                        .HasForeignKey("roomHouseId")
+                        .HasForeignKey("RoomHouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
 
-                    b.Navigation("roomHouse");
+                    b.Navigation("RoomHouse");
                 });
 #pragma warning restore 612, 618
         }
