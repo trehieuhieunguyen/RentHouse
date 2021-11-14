@@ -4,6 +4,12 @@
 	ViewData["Title"] = "DetailRoomInHouse";
 	Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
 }
+@if (TempData["SuccessFull"] != null)
+{
+	<div class="p-3 mb-2 bg-success text-white">
+		@TempData["SuccessFull"]
+	</div>
+}
 @if (TempData["Error"] != null)
 {
 	<div class="p-3 mb-2 bg-danger text-white">

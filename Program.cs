@@ -9,11 +9,11 @@ using RentHouse.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+ConfigurationManager configuration = builder.Configuration;
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
-builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
     options.Password.RequireLowercase = false;
     options.Password.RequireNonAlphanumeric = false;
@@ -33,7 +33,19 @@ builder.Services.AddScoped<IUserReponsitory, UserReponsitory>();
 builder.Services.AddScoped<IDashBoardReponsitory, DashBoardReponsitory>();
 builder.Services.AddScoped<IRoomReponsitory, RoomReponsitory>();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
+builder.Services.AddAuthentication()
+               .AddGoogle(options =>
+               {
+                   IConfigurationSection googleAuthSection = configuration.GetSection("Authentication:Google");
 
+                   options.ClientId = googleAuthSection["ClientId"];
+                   options.ClientSecret = googleAuthSection["ClientSecret"];
+               })
+                .AddFacebook(FacebookOption =>
+                {
+                    FacebookOption.AppId = configuration["Authentication:Facebook:AppId"];
+                    FacebookOption.AppSecret = configuration["Authentication:Facebook:AppSecret"];
+                });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

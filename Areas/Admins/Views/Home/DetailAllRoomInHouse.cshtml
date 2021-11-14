@@ -102,3 +102,12 @@
 		}
 	</tbody>
 </table>
+@section Scripts{
+<script>
+		$("button").click(function() {
+		var id_remove = $(this).attr('value');
+			console.log(id_remove);
+			   $("#idremove").attr("value", id_remove );
+		});
+</script>
+}

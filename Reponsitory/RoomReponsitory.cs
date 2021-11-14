@@ -141,7 +141,7 @@ namespace RentHouse.Reponsitory
         }
         public async Task<RoomHouse> GetRoomForAdmin(int id)
         {
-            var x = await _db.roomHouses.FirstOrDefaultAsync(x => x.Id == id);
+            var x = await _db.roomHouses.Include(x=>x.house).FirstOrDefaultAsync(x => x.Id == id);
             return x;
         }
         

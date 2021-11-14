@@ -303,9 +303,9 @@ namespace RentHouse.Areas.Admins.Controllers
         [HttpPost]
         public async Task<IActionResult> CloneData(int dataroom, int roomNumber)
         {
-            TempData["Error"] = "";
+           
             var x =await _resroom.GetRoomForAdmin(dataroom);
-            if (roomNumber == 0)
+            if (roomNumber == 0||roomNumber>x.house.AllRoom)
             {
                 TempData["Error"] = "Please Enter Number Room Create";
                 return RedirectToAction("DetailRoomInHouse", new { id = x.HouseId });
@@ -337,6 +337,7 @@ namespace RentHouse.Areas.Admins.Controllers
             }
             
                 _resroom.CreateImageRoom(imageUploadOfRoomsNew);
+                TempData["SuccessFull"] = "Clone Data SuccessFul";
               return  RedirectToAction("DetailRoomInHouse", new { id = x.HouseId });
             }
             return BadRequest();
