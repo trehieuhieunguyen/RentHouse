@@ -42,6 +42,7 @@ namespace RentHouse.Areas.Admins.Controllers
                 roomHouse.UrlImg = file.FileName;
             }
             roomHouse.UpdateTime= DateTime.Now;
+            roomHouse.Star = 4;
             if (!ModelState.IsValid)
             {
                 if (!_res.CheckNumberRoom(roomHouse.HouseId, roomHouse.RoomNumber))

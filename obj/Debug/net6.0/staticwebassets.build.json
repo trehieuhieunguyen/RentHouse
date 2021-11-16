@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Cyw1cE3I9OrstIhKUC9M3hGfu+tC9gKO73wgtSx/ZIQ=",
+  "Hash": "p/aQa7wIdrggX9ac2glnDpevNxcRo5dfQxZ/4/mpRAo=",
   "Source": "RentHouse",
   "BasePath": "_content/RentHouse",
   "Mode": "Default",
@@ -3177,6 +3177,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\Users\\ASUS\\source\\repos\\RentHouse\\RentHouse\\wwwroot\\lib\\signalr.min.js",
+      "SourceId": "RentHouse",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ASUS\\source\\repos\\RentHouse\\RentHouse\\wwwroot\\",
+      "BasePath": "_content/RentHouse",
+      "RelativePath": "lib/signalr.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\lib\\signalr.min.js"
     }
   ]
 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using ReflectionIT.Mvc.Paging;
+using RentHouse.Areas.User.Controllers;
 using RentHouse.Data;
 using RentHouse.Reponsitory;
 using RentHouse.Reponsitory.IReponsitory;
@@ -32,6 +33,8 @@ builder.Services.AddScoped<IHouseReponsitory, HouseReponsitory>();
 builder.Services.AddScoped<IUserReponsitory, UserReponsitory>();
 builder.Services.AddScoped<IDashBoardReponsitory, DashBoardReponsitory>();
 builder.Services.AddScoped<IRoomReponsitory, RoomReponsitory>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddSignalR();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.AddAuthentication()
                .AddGoogle(options =>
@@ -72,10 +75,12 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    
     );
     endpoints.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+    endpoints.MapHub<MessageHub>("hubs/messages");
 });
 app.MapRazorPages();
 

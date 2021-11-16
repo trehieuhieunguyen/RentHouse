@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ReflectionIT.Mvc.Paging;
 using RentHouse.Models;
+using RentHouse.Models.ViewModel;
 using RentHouse.Reponsitory.IReponsitory;
 using System.Diagnostics;
 

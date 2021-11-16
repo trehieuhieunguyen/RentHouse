@@ -6,23 +6,23 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="row justify-content-center mt-5">
+<div class="row justify-content-center mt-5" style="padding-bottom: 100px;">
     <div class="col-md-5">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h2>Create a new account.</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-           <div class="form-floating">
+           <div class="form-floating mt-2">
                <label asp-for="Input.FirstName"></label>
                 <input asp-for="Input.FirstName" class="form-control" autocomplete="username" aria-required="true" />
                 <span asp-validation-for="Input.FirstName" class="text-danger"></span>
             </div>
-            <div class="form-floating">
+            <div class="form-floating mt-2">
                 <label asp-for="Input.LastName"></label>
                 <input asp-for="Input.LastName" class="form-control" autocomplete="username" aria-required="true" /> 
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
-            <div class="form-floating mb-2 mt-2">
+            <div class="form-floating mt-2">
                
                 <input  type="hidden" id="value_shipping_provinces" asp-for="Input.city" class="form-control" />
                
@@ -31,7 +31,7 @@
                 </select>
                 <span asp-validation-for="Input.city" class="text-danger"></span>
             </div>
-            <div class="form-floating mb-2">
+            <div class="form-floating mt-2">
                 
                 <input  type="hidden" id="value_shipping_district" asp-for="Input.district" class="form-control" />
                 <select name="calc_shipping_district" id="shipping_district"  onChange="update2()"  class="form-control">
@@ -41,23 +41,23 @@
             </div>
             
 
-            <div class="form-floating">
+            <div class="form-floating mt-2">
                 <label asp-for="Input.Email"></label>
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
                 
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <div class="form-floating">
+            <div class="form-floating mt-2">
                  <label asp-for="Input.Password"></label>
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
-            <div class="form-floating">
+            <div class="form-floating mt-2">
                 <label asp-for="Input.ConfirmPassword"></label>
                 <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mt-2">Register</button>
         </form>
     </div>
     <div class="col-md-6 col-md-offset-2">

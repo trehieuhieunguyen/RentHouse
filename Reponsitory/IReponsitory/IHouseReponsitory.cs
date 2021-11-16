@@ -17,5 +17,6 @@ namespace RentHouse.Reponsitory.IReponsitory
         Task<bool> CreateHouseOfUser(HouseOfUser houseOfUser);
         Task<ICollection<RoomHouse>> getRoomInHouse(int id);
         Task<bool> CheckNameCreateHouse(string Name);
+        Task<ICollection<House>> GetHouseForUser(string id);
     }
 }

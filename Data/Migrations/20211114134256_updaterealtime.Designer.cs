@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentHouse.Data;
 
@@ -11,9 +12,10 @@ using RentHouse.Data;
 namespace RentHouse.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211114134256_updaterealtime")]
+    partial class updaterealtime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -441,36 +443,6 @@ namespace RentHouse.Data.Migrations
                     b.ToTable("messageRooms");
                 });
 
-            modelBuilder.Entity("RentHouse.Models.RatingStar", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("RoomHouseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Star")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("RoomHouseId");
-
-                    b.ToTable("RatingStars");
-                });
-
             modelBuilder.Entity("RentHouse.Models.RoomHouse", b =>
                 {
                     b.Property<int>("Id")
@@ -489,9 +461,6 @@ namespace RentHouse.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<double>("RoomSize")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Star")
                         .HasColumnType("float");
 
                     b.Property<bool>("StatusRent")
@@ -710,25 +679,6 @@ namespace RentHouse.Data.Migrations
                 });
 
             modelBuilder.Entity("RentHouse.Models.MessageRoom", b =>
-                {
-                    b.HasOne("RentHouse.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RentHouse.Models.RoomHouse", "RoomHouse")
-                        .WithMany()
-                        .HasForeignKey("RoomHouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("RoomHouse");
-                });
-
-            modelBuilder.Entity("RentHouse.Models.RatingStar", b =>
                 {
                     b.HasOne("RentHouse.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()

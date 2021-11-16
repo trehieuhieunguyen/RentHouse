@@ -1,0 +1,169 @@
+﻿@model ICollection<RentHouse.Models.House>
+
+@{
+    ViewData["Title"] = "GetHouseOfUser";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+<h1>GetHouseOfUser</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                NameHourse
+            </th>
+            <th>
+               ImgUrl
+            </th>
+            <th>
+                Ward
+            </th>
+            <th>
+               City
+            </th>
+            <th>
+               District
+            </th>
+            <th>
+               TimeCreate
+            </th>
+            <th>
+              TimeUpdate
+            </th>
+            <th>
+               AllRoom
+            </th>
+            <th>
+               isDeleted
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameHourse)
+            </td>
+            <td>
+                <img style="width:100px;height:40px;" src="/img/@item.ImgUrl" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ward)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.District)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeCreate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeUpdate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AllRoom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isDeleted)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@if (TempData["SuccessFull"] != null)
+{
+	<div class="p-3 mb-2 bg-success text-white">
+		@TempData["SuccessFull"]
+	</div>
+}
+@if (TempData["Error"] != null)
+{
+	<div class="p-3 mb-2 bg-danger text-white">
+		@TempData["Error"]
+	</div>
+}
+@foreach (var y in Model)
+{
+	<a class="text-decoration-none" asp-action="DetailAllHouse" asp-route-id="@y.Id"><h1>Detail All Room In House</h1></a>
+	break;
+}
+<div class="container">
+	<div class="row">
+		@for (int x = 1; x <= Model.Count()+1; x++)
+		{
+			foreach (var y in Model)
+			{
+					if (y.isDeleted == true)
+					{
+						<div class="col-md-5 m-lg-3">
+							<button class="btn btn-primary btn-sm ml-5 position-absolute" type="button" data-toggle="modal" data-target="#exampleModalCenter2" value="@y.Id"><i class="fas fa-copy"></i></button>
+							<a type="button" asp-area="User" asp-controller="Home" asp-action="DetailRoom" asp-route-id="@y.Id" class="btn btn-danger ml-5" style="width:450px; height:200px;"><i class="fa fa-home" aria-hidden="true" style="width:50%; height:50%;"></i><h1>House:@y.NameHourse</h1></a>
+
+						</div>
+                        Model.Remove(y);
+                        break;
+					}
+					else
+					{
+						<div class="col-md-5 m-lg-3">
+							<button class="btn btn-primary btn-sm ml-5 position-absolute" type="button" data-toggle="modal" data-target="#exampleModalCenter2" value="@y.Id"><i class="fas fa-copy"></i></button>
+							<a type="button" asp-area="User" asp-controller="Home" asp-action="DetailRoom" asp-route-id="@y.Id" class="btn btn-success ml-5" style="width:450px; height:200px;"><i class="fa fa-home" aria-hidden="true" style="width:50%; height:50%;"></i><h1>House:@y.NameHourse</h1></a>
+						</div>
+                        Model.Remove(y);
+                        break;
+					}
+			}
+		}
+	</div>
+	<div id="exampleModalCenter2" class="modal fade">
+		<div class="modal-dialog modal-confirm">
+			<div class="modal-content">
+				<div class="modal-header flex-column">
+					<h4 class="modal-title w-100">Are you sure?</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				</div>
+				<div class="modal-body">
+					<p>De you pass date to other roomhouse</p>
+				</div>
+				<div class="modal-footer justify-content-center">
+
+					<form asp-action="CloneData" name="myForm">
+
+						<input type="hidden" id="dataroom" name="dataroom" value="" />
+						<input type="text" class="form-control mb-3" id="roomNumber" name="roomNumber" placeholder="RoomNumber" />
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+						<input type="submit" value="Sure" class="btn btn-success" onclick="validateForm()" />
+
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@section Scripts{
+<script>
+	$("button").click(function() {
+	var id_remove = $(this).attr('value');
+		console.log(id_remove);
+		   $("#idremove").attr("value", id_remove );
+	var data_room = $(this).attr('value');
+		console.log(data_room);
+		   $("#dataroom").attr("value", data_room );
+	});
+
+</script>
+<partial name="_ValidationScriptsPartial" />
+}

@@ -112,5 +112,16 @@ namespace RentHouse.Reponsitory
             var x =await _db.roomHouses.Include(x => x.house).Where(x=>x.HouseId == id).ToListAsync();
             return x;
         }
+        public async Task<ICollection<House>> GetHouseForUser(string id)
+        {
+            var x = await _db.houseOfUser.Where(x=>x.ApplicationUserId==id).ToListAsync();
+            ICollection<House> hou = new List<House>();
+            foreach(var houses in x)
+            {
+                var house = await _db.houses.FirstOrDefaultAsync(x => x.Id == houses.HouseId);
+                hou.Add(house);
+            }
+            return hou;
+        }
     }
 }

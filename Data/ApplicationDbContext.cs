@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RentHouse.Models;
+using RentHouse.Models.Groups;
 
 namespace RentHouse.Data
 {
@@ -21,5 +22,8 @@ namespace RentHouse.Data
         public DbSet<MessageRoom> messageRooms { get; set; }
         public DbSet<ImageUploadOfRoom> SubImageOfRoom { get; set; }
         public DbSet<HouseOfUser> houseOfUser { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Connection> Connections { get; set; }
+        public DbSet<RatingStar> RatingStars {  get; set; }
     }
 }

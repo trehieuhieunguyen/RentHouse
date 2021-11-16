@@ -41,6 +41,54 @@ namespace RentHouse.Reponsitory
             var x = await _db.SubImageOfRoom.Where(x => x.RoomHouseId == id).ToListAsync();
             return x;
         }
+        public bool CheckExistsStarOfUser(string id, int roomid)
+        {
+            var x = _db.RatingStars.Where(x=>x.RoomHouseId==roomid).ToList();
+            if (x == null)
+            {
+                return true;
+            }
+            foreach(var item in x)
+            {
+                if (item.ApplicationUserId == id)
+                {
+                    return false;
+                }
+
+            }
+            return true;
+        }
+        public int StarOfUser(string id, int roomid)
+        {
+            var x = _db.RatingStars.Where(x => x.RoomHouseId == roomid).ToList();
+            if (x == null)
+            {
+                return 0;
+            }
+            foreach (var item in x)
+            {
+                if (item.ApplicationUserId == id)
+                {
+                    return item.Star;
+                }
+
+            }
+            return 0;
+        }
+        public  async Task<double> StarOfRoom(int roomid)
+        {
+            var x =await _db.RatingStars.Where(x => x.RoomHouseId == roomid).ToListAsync();
+            if (x.Count != 0)
+            {
+                return  x.Average(y => y.Star);
+            }
+            else
+            {
+                return  0;
+            }
+           
+        }
+        
         public bool CheckHouseId(int id)
         {
             var x = _db.houses.Where(x => x.Id == id).ToList();
@@ -54,6 +102,12 @@ namespace RentHouse.Reponsitory
                 return false;
             }
         }
+        public bool CreateStar(RatingStar rating)
+        {
+            _db.RatingStars.Add(rating);
+            return SaveChange();
+        }
+        
         public async Task<bool> DeleteRoom(int id)
         {
             var x = await _db.roomHouses.FirstOrDefaultAsync(x => x.Id == id);
@@ -132,6 +186,7 @@ namespace RentHouse.Reponsitory
             {
                 price = 100;
             }
+            
             var x = _db.roomHouses.AsNoTracking().Include(x => x.house).Where(x => (x.house.City.Contains(title)
                                                   || x.house.District.Contains(title)
                                                   || x.house.Ward.Contains(title)

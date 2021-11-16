@@ -21,5 +21,9 @@ namespace RentHouse.Reponsitory.IReponsitory
         bool EditRoom(RoomHouse roomhouse);
         bool CheckRoomNumberCreate(int roomnumber, int houseId);
         bool CheckRoomNumberEdit(int roomnumber, int houseId, int roomId);
+        bool CreateStar(RatingStar rating);
+        bool CheckExistsStarOfUser(string id, int roomid);
+        int StarOfUser(string id, int roomid);
+        Task<double> StarOfRoom(int roomid);
     }
 }

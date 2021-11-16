@@ -37,13 +37,24 @@ namespace RentHouse.Areas.User.Controllers
             
             var commentroom = await _res.GetCommentRooms(id);
             roomCommentVM.commentRooms = commentroom;
+            roomCommentVM.RatingStarUser = _res.CheckExistsStarOfUser(User.GetUserId(), roomhouse.Id);
+            if(_res.StarOfUser(User.GetUserId(), roomhouse.Id) != 0)
+            {
+                roomCommentVM.StarUser = _res.StarOfUser(User.GetUserId(), roomhouse.Id);
+            }
+            else
+            {
+                roomCommentVM.StarUser = 0;
+            }
+            
             ICollection<ImageUploadOfRoom> imageUploads = await _res.imageUploadOfRooms(id);
             roomCommentVM.imageUploadOfRooms =  imageUploads;
             return View(roomCommentVM);
         }
         [HttpPost]
-        public async Task<IActionResult> CommitMessage(string message,int id)
+        public async Task<IActionResult> CommitMessage(string message,int id,string ratingstar)
         {
+            
             MessageRoom commentRoom = new MessageRoom();
             commentRoom.ApplicationUserId = User.GetUserId();
             commentRoom.Status = true;
@@ -51,13 +62,35 @@ namespace RentHouse.Areas.User.Controllers
             commentRoom.CreateTime= DateTime.Now;
             commentRoom.RoomHouseId = id;
             commentRoom.Text = message;
+            
+            if (ratingstar != null && ratingstar!="")
+            {
+                RatingStar ratingStar = new RatingStar();
+                ratingStar.Star = int.Parse(ratingstar);
+                ratingStar.RoomHouseId = id;
+                ratingStar.ApplicationUserId = User.GetUserId();
+                ratingStar.CreateTime = DateTime.Now;
+                _res.CreateStar(ratingStar);
+            }
+            
             if (_res.SaveComment(commentRoom))
             {
                 RoomCommentVM roomCommentVM = new RoomCommentVM();
 
                 var roomhouse = await _res.GetRoomHouseForUserbyId(id);
+                var star = await _res.StarOfRoom(id);
+                roomhouse.Star = star;
+                _res.EditRoom(roomhouse);
                 roomCommentVM.roomHouse = roomhouse;
-
+                roomCommentVM.RatingStarUser = _res.CheckExistsStarOfUser(User.GetUserId(), roomhouse.Id);
+                if (_res.StarOfUser(User.GetUserId(), roomhouse.Id) != 0)
+                {
+                    roomCommentVM.StarUser = _res.StarOfUser(User.GetUserId(), roomhouse.Id);
+                }
+                else
+                {
+                    roomCommentVM.StarUser = 0;
+                }
                 var commentroom = await _res.GetCommentRooms(id);
                 roomCommentVM.commentRooms = commentroom;
                 ICollection<ImageUploadOfRoom> imageUploads = await _res.imageUploadOfRooms(id);
@@ -167,6 +200,19 @@ namespace RentHouse.Areas.User.Controllers
                 return true;
             }
             return false;
+        }
+        public async Task<IActionResult> GetHouseOfUser()
+        {
+            var user = User.GetUserId();
+            var houses = await _resHouse.GetHouseForUser(user);
+            if(houses != null)
+            {
+                return View(houses);
+            }
+            else
+            {
+                return View();
+            }
         }
     }
 }

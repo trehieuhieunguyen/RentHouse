@@ -2,7 +2,7 @@
 @using ReflectionIT.Mvc.Paging
 @addTagHelper *, ReflectionIT.Mvc.Paging.PagingList
 @{
-	ViewData["Title"] = "Index";
+	
 	Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
 }
 @{
@@ -28,13 +28,13 @@
 
 <form class="form-inline" role="form">
 	<div class="form-group input ">
-		<input style="border:none;box-shadow: none !important;background-color: #DDDDDD;" type="text" class="form-control" name="" id="search" placeholder="Nhập" value="@ViewBag.keyword">
+		<input  type="text" class="form-input-search" name="" id="search" placeholder="Nhập" value="@ViewBag.keyword">
 	</div>
 	<div class="form-group">
-		<input id="pagechoose" name="pagechoose" value="@ViewBag.pagechoose" class="form-control" />
+		<input id="pagechoose" name="pagechoose" value="@ViewBag.pagechoose" class="form-input" />
 	</div>
-	<button type="button" id="searchurl" class="iconsearch">
-		<i class="fas fa-search" aria-hidden="true" style="color: white;width:80px;height:40px;"></i>
+	<button type="button" id="searchurl" style="width: 60px;height: 45px;border: none;background-color: #0074D9;color: white ; margin-left: 5px">
+		<i class="fas fa-search" aria-hidden="true"></i>
 	</button>
 
 </form>
@@ -42,9 +42,7 @@
 <table class="table">
 	<thead>
 		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.First().Id)
-			</th>
+			
 			<th>
 				@Html.DisplayNameFor(model => model.First().ImgUrl)
 			</th>
@@ -66,10 +64,8 @@
 			<th>
 				@Html.DisplayNameFor(model => model.First().TimeCreate)
 			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.First().isDeleted)
-			</th>
-			<th></th>
+			
+			<th colspan="3"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -79,17 +75,18 @@
 				ViewData["isdeleted"] = @item.isDeleted ? "opacity:0.7" : "";
 			}
 			<tr style="@ViewData["isdeleted"];">
+
 				<td>
-					@Html.DisplayFor(modelItem => item.Id)
-				</td>
-				<td>
-					<img style="width:100px;height:40px;" src="/img/@item.ImgUrl" />
+					<img style="width:70px;height:40px;" src="/img/@item.ImgUrl" />
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.NameHourse)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.Ward)
+					<span class="wikibox">
+						@Html.DisplayFor(modelItem => item.Ward)
+					</span>
+					
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.City)
@@ -103,18 +100,10 @@
 				<td>
 					@Html.DisplayFor(modelItem => item.TimeCreate)
 				</td>
-				@if (item.isDeleted)
-				{
-					<td>Đã Xóa</td>
-				}
-				else
-				{
-					<td>Chưa xóa</td>
-				}
 				<td>
-					<a asp-action="EditHouse" asp-route-id="@item.Id">Edit</a> |
-					<a asp-action="DetailHouse" asp-route-id="@item.Id">Details</a> |
-					<a asp-action="DetailRoomInHouse" asp-route-id="@item.Id">DetailsRoom</a> |
+					<a asp-action="EditHouse" asp-route-id="@item.Id">Edit</a>|
+					<a asp-action="DetailHouse" asp-route-id="@item.Id">Details</a>|
+					@*<a asp-action="DetailRoomInHouse" asp-route-id="@item.Id">DetailsRoom</a>|*@
 					@if (!item.isDeleted)
 					{
 						<button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="modal" data-target="#exampleModalCenter" value="@item.Id">Delete</button>

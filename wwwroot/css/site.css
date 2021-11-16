@@ -6,6 +6,32 @@ a.navbar-brand {
   text-align: center;
   word-break: break-all;
 }
+.wikibox {
+    height: 20px;
+    width: 150px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+.form-input {
+    margin-left: 10px;
+    border: 1px solid #0074D9;
+    width: 50px;
+    height: 44px;
+    border-radius: 3px;
+    outline: none;
+    padding: 10px 18px;
+}
+.form-input-search {
+    margin-left: 10px;
+    border: 1px solid #0074D9;
+    width: 250px;
+    height: 44px;
+    border-radius: 3px;
+    outline: none;
+    padding: 10px 18px;
+}
 
 .content-item {
     padding: 30px 0;

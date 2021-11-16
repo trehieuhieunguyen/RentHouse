@@ -19,10 +19,16 @@
 <form class="form-inline" role="form">
 	<input class="form-group" type="hidden" id="priceRent" name="priceRent" class="form-control" />
 	<div class="form-group input ">
-		<input style="border:none;box-shadow: none !important;background-color: #DDDDDD;" type="text" class="form-control" name="" id="search" placeholder="Nhập" value="@ViewBag.keyword">
+		<input  type="text" style="margin-left: 10px;
+	border: 1px solid #0074D9;
+	width: 250px;
+	height: 44px;
+	border-radius: 3px;
+	outline: none;
+	padding: 10px 18px;" name="" id="search" placeholder="Nhập" value="@ViewBag.keyword">
 	</div>
-	<button type="button" id="searchurl" class="iconsearch">
-		<i class="fas fa-search" aria-hidden="true" style="color: white;width:80px;height:40px;"></i>
+	<button type="button" id="searchurl" class="" style="width: 60px;height: 45px;border: none;background-color: #0074D9;color: white;">
+		<i class="fas fa-search" aria-hidden="true" ></i>
 	</button>
 </form>
 
@@ -90,15 +96,12 @@
 			<div class="down-content">
 				<a href="#"><h4>Tittle goes here</h4></a>
 				<h6>$@x.PriceRent</h6>
-				<p>@x.house.NameHourse</p>
-				<ul class="stars">
-					<li><i class="fas fa-star"></i></li>
-					<li><i class="fas fa-star"></i></li>
-					<li><i class="fas fa-star"></i></li>
-					<li><i class="fas fa-star"></i></li>
-					<li><i class="fas fa-star"></i></li>
-				</ul>
-				<span><a class="btn btn-outline-dark mt-auto" asp-action="DetailRoom" asp-route-id="@x.Id" asp-area="User">View options</a></span>
+				<p>Name House: @x.house.NameHourse 				</p>
+				<span class="text-warning" style="height:35px;font-size:22px;">
+						<i class="fas fa-star"></i>4.7
+					</span>
+					
+				<a class="btn btn-outline-dark mt-auto" asp-action="DetailRoom" asp-route-id="@x.Id" asp-area="User">View options</a>
 			</div>
 		</div>
 	</div>

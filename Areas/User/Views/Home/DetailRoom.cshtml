@@ -69,17 +69,71 @@
 										@* <div class="col-sm-3 col-lg-2 hidden-xs">
 											<img class="img-responsive" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
 											</div>*@
+											<input type="hidden" id="ratingstar" name="ratingstar" value="" class="form-input" />
 										<div class="form-group col-xs-12 col-sm-9 col-lg-10">
 											<textarea class="form-control" id="message" name="message" placeholder="Your message" required=""></textarea>
 										</div>
 										<div class="form-group">
-											<span class="text-warning">
-												<i class="ratingStar fas fa-star"></i>
-												<i class="ratingStar fas fa-star"></i>
-												<i class="ratingStar far fa-star"></i>
-												<i class="ratingStar far fa-star"></i>
-												<i class="ratingStar far fa-star"></i>
-											</span>
+	
+												@if(Model.RatingStarUser == true){
+													<span id="startId1" class="text-warning">
+													<i id="ratingStar1" class="far fa-star"></i>
+												
+												</span>
+												<span id="startId2" class="text-warning">
+													<i id="ratingStar2" class="far fa-star"></i>
+												
+												</span>
+												<span id="startId3" class="text-warning">
+													<i id="ratingStar3" class="far fa-star"></i>
+												
+												</span>
+												<span id="startId4" class="text-warning">
+													<i id="ratingStar4" class="far fa-star"></i>
+												
+												</span>
+												<span id="startId5" class="text-warning">
+													<i id="ratingStar5" class="far fa-star"></i>
+												
+												</span>
+											}else{
+												if(Model.StarUser == 1)
+												{
+													<i  class="fas fa-star"></i>
+													<i  class="far fa-star"></i>
+													<i  class="far fa-star"></i>
+													<i  class="far fa-star"></i>
+													<i  class="far fa-star"></i>
+												}else if(Model.StarUser == 2)
+												{
+													<i  class="fas fa-star"></i>
+													<i  class="fas fa-star"></i>
+													<i  class="far fa-star"></i>
+													<i  class="far fa-star"></i>
+													<i  class="far fa-star"></i>
+												}else if(Model.StarUser == 3)
+												{
+													<i  class="fas fa-star"></i>
+													<i  class="fas fa-star"></i>
+													<i  class="fas fa-star"></i>
+													<i  class="far fa-star"></i>
+													<i  class="far fa-star"></i>
+												}else if(Model.StarUser == 4)
+												{
+													<i  class="fas fa-star"></i>
+													<i  class="fas fa-star"></i>
+													<i  class="fas fa-star"></i>
+													<i  class="fas fa-star"></i>
+													<i  class="far fa-star"></i>
+												}else if(Model.StarUser == 5)
+												{
+													<i  class="fas fa-star"></i>
+													<i  class="fas fa-star"></i>
+													<i  class="fas fa-star"></i>
+													<i  class="fas fa-star"></i>
+													<i  class="fas fa-star"></i>
+												}
+											}
 										</div>
 									</div>
 								</fieldset>
@@ -101,7 +155,10 @@
 									</div>
 								</div>
 							}
-
+							@*<div id="messageStatus">
+							
+							</div>
+*@
 							<!-- COMMENT 1 - END -->
 						</div>
 					</div>
@@ -114,3 +171,109 @@
 	<a asp-action="Edit" asp-route-id="@Model.roomHouse.Id">Edit</a> |
 	<a asp-action="Index">Back to List</a>
 </div>
+@section Scripts{
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	<script>
+@*
+        "use strict";*@
+		$("#startId1").click(function () {
+		$("#ratingStar1").addClass("fas").removeClass("far");
+		$("#ratingStar2").addClass("far").removeClass("fas");
+		$("#ratingStar3").addClass("far").removeClass("fas");
+		$("#ratingStar4").addClass("far").removeClass("fas");
+		$("#ratingStar5").addClass("far").removeClass("fas");
+		$("#ratingstar").attr("value", "1" );
+
+		});
+		$("#startId2").click(function () {
+		$("#ratingStar1").addClass("fas").removeClass("far");
+		$("#ratingStar2").addClass("fas").removeClass("far");
+		$("#ratingStar3").addClass("far").removeClass("fas");
+		$("#ratingStar4").addClass("far").removeClass("fas");
+		$("#ratingStar5").addClass("far").removeClass("fas");
+		$("#ratingstar").attr("value", "2");
+		});
+		$("#startId3").click(function () {
+		$("#ratingStar1").addClass("fas").removeClass("far");
+		$("#ratingStar2").addClass("fas").removeClass("far");
+		$("#ratingStar3").addClass("fas").removeClass("far");
+		$("#ratingStar4").addClass("far").removeClass("fas");
+		$("#ratingStar5").addClass("far").removeClass("fas");
+		$("#ratingstar").attr("value", "3" );
+		});
+		$("#startId4").click(function () {
+		$("#ratingStar1").addClass("fas").removeClass("far");
+		$("#ratingStar2").addClass("fas").removeClass("far");
+		$("#ratingStar3").addClass("fas").removeClass("far");
+		$("#ratingStar4").addClass("fas").removeClass("far");
+		$("#ratingStar5").addClass("far").removeClass("fas");
+		$("#ratingstar").attr("value", "4" );
+		});
+		$("#startId5").click(function () {
+		$("#ratingStar1").addClass("fas").removeClass("far");
+		$("#ratingStar2").addClass("fas").removeClass("far");
+		$("#ratingStar3").addClass("fas").removeClass("far");
+		$("#ratingStar4").addClass("fas").removeClass("far");
+		$("#ratingStar5").addClass("fas").removeClass("far");
+		$("#ratingstar").attr("value", "5" );
+		});
+      @*  var url = window.location.origin;
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl(url + "/hubs/messages?RecipientProductId="+@Model.roomHouse.Id)
+            .withAutomaticReconnect().build();
+
+        connection.on("ReceiveMessageThread", function (messages) {
+         console.log(messages);
+            var msgEmail = "";
+            var msgContent = "";
+            var msgDateSent = "";
+            for (let index = 0; index < messages.length; index++) {
+				msgEmail = messages[index].applicationUser.email
+                msgContent = messages[index].text;
+                msgDateSent = messages[index].updateTime;
+                CreateChild(msgEmail, msgContent, msgDateSent);
+            }
+        });
+
+        connection.on("NewMessage", function (message) {
+			var msgEmail = messages[index].applicationUser.email;
+            var msgContent = message.text;
+            var msgDateSent = message.updateTime;
+            CreateChild(msgEmail, msgContent, msgDateSent);
+            
+        });
+
+        if (this.connection) { connection.stop();}
+        connection.start().catch(function(err) {
+            return console.error(err.toString());
+        });*@
+
+		@*document.getElementById("sendMessage").addEventListener("click", function (event) {
+            var messages = document.getElementById("message").value;
+           console.log(messages)
+            connection.invoke("SendMessageProduct", {
+                RecipientProductId:"@Model.roomHouse.Id",
+                Content: messages
+            }).then(function () {
+                document.getElementById("message").value = "";
+            }).catch(function (err) {
+                return console.error(err.toString());
+            });
+            event.preventDefault();
+        });
+       *@
+
+       @* function CreateChild(msgEmail, msgContent, msgDateSent) {
+			var result = `<div class="media">
+									<div class="media-body">
+										<h4 class="media-heading">${msgEmail}</h4>
+										<p>${msgContent}</p>
+										<ul class="list-unstyled list-inline media-detail pull-left">
+											<li><i class="fa fa-calendar"></i>${msgDateSent}</li>
+										</ul>
+									</div>
+								</div>`;
+             $("#messageStatus").append(result);
+        }*@
+    </script>
+	}

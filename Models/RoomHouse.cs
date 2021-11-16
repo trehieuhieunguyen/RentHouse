@@ -24,5 +24,6 @@ namespace RentHouse.Models
         public bool StatusRent { get; set; }
         public string UrlImg { get; set; }
         public DateTime UpdateTime { get; set; }
+        public double Star { get;set;  }
     }
 }
