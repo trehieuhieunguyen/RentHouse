@@ -1,0 +1,55 @@
+﻿@model IEnumerable<RentHouse.Models.ViewModel.HistoryUserVM>
+
+@{
+    ViewData["Title"] = "GetHistoryPay";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+<h1>GetHistoryPay</h1>
+@if (TempData["SuccessFull"] != null)
+{
+	<div class="p-3 mb-2 bg-success text-white">
+		@TempData["SuccessFull"]
+	</div>
+}
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Email
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.historyPays.RoomHouse)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.historyPays.PricePay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.historyPays.TimePay)
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailUser)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.historyPays.RoomHouse.house.NameHourse)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.historyPays.PricePay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.historyPays.TimePay)
+            </td>
+            
+        </tr>
+}
+    </tbody>
+</table>

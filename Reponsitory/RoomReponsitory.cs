@@ -233,5 +233,68 @@ namespace RentHouse.Reponsitory
                 return x;
             }
         }
+        public async Task<ICollection<HistoryPay>> GetHistory(string Id)
+        {
+            var history = await _db.HistoryPay.Include(x => x.RoomHouse.house).Where(x => x.ApplicationUserId == Id).ToListAsync();
+            return history;
+        }
+        public async Task<string> GetHouseOfUser(int houseId)
+        {
+            var userhouse = await _db.houseOfUser.Include(x=>x.ApplicationUser).FirstOrDefaultAsync(x=>x.HouseId==houseId);
+            return userhouse.ApplicationUser.Email;
+        }
+        public bool CreatePayPal(HistoryPay historyPay)
+        {
+            _db.HistoryPay.Add(historyPay);
+            return SaveChange();
+        }
+        public bool CheckRoomNumberChange(int roomnumber, int houseId)
+        {
+
+            var x = _db.roomHouses.Where(x => x.HouseId == houseId).ToList();
+            foreach (var item in x)
+            {
+                if (item.RoomNumber == roomnumber)
+                {
+                    return false;
+                }
+            }
+            return true;
+
+        }
+        public bool CheckRoomNumberHadRent(int roomnumber, int houseId)
+        {
+
+            var x = _db.roomHouses.Where(x => x.HouseId == houseId).ToList();
+            foreach (var item in x)
+            {
+                if (item.RoomNumber == roomnumber && item.StatusRent == false)
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+        public async Task<HistoryPay> GetHistoryForAdmin(int roomId)
+        {
+            var x = await _db.HistoryPay.Include(x=>x.RoomHouse).FirstOrDefaultAsync(x=>x.RoomHouseId==roomId);
+            return x;
+        }
+        public bool EditHistory(HistoryPay historyPay)
+        {
+            _db.HistoryPay.Update(historyPay);
+            return SaveChange();
+        }
+        public async Task<RoomHouse> GetRoomEdit(int houseId, int roomnumber)
+        {
+            var room = await _db.roomHouses.FirstOrDefaultAsync(x=>x.HouseId==houseId&& x.RoomNumber==roomnumber);
+            return room;
+        }
+        public bool SaveMutilRoom(IList<RoomHouse> roomHouses)
+        {
+            _db.roomHouses.UpdateRange(roomHouses);
+            return SaveChange();
+        }
     }
 }

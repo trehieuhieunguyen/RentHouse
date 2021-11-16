@@ -25,5 +25,14 @@ namespace RentHouse.Reponsitory.IReponsitory
         bool CheckExistsStarOfUser(string id, int roomid);
         int StarOfUser(string id, int roomid);
         Task<double> StarOfRoom(int roomid);
+        Task<ICollection<HistoryPay>> GetHistory(string Id);
+        bool CreatePayPal(HistoryPay historyPay);
+        Task<string> GetHouseOfUser(int houseId);
+        bool CheckRoomNumberChange(int roomnumber, int houseId);
+        bool CheckRoomNumberHadRent(int roomnumber, int houseId);
+        Task<HistoryPay> GetHistoryForAdmin(int roomId);
+        bool EditHistory(HistoryPay historyPay);
+         Task<RoomHouse> GetRoomEdit(int houseId, int roomnumber);
+        bool SaveMutilRoom(IList<RoomHouse> roomHouses);
     }
 }

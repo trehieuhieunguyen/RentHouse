@@ -25,5 +25,6 @@ namespace RentHouse.Data
         public DbSet<Group> Groups { get; set; }
         public DbSet<Connection> Connections { get; set; }
         public DbSet<RatingStar> RatingStars {  get; set; }
+        public DbSet<HistoryPay> HistoryPay { get; set; }
     }
 }

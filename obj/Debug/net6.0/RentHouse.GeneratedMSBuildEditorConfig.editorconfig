@@ -150,12 +150,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVXNlclxWaWV3c1xIb21lXERldGFpbFJvb20uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/User/Views/Home/GetHistoryPay.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVXNlclxWaWV3c1xIb21lXEdldEhpc3RvcnlQYXkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/User/Views/Home/GetHouseOfUser.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVXNlclxWaWV3c1xIb21lXEdldEhvdXNlT2ZVc2VyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/User/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVXNlclxWaWV3c1xIb21lXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/User/Views/Payment/PaypalSuccess.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcVXNlclxWaWV3c1xQYXltZW50XFBheXBhbFN1Y2Nlc3MuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [c:/Users/ASUS/source/repos/RentHouse/RentHouse/Areas/User/Views/Shared/_Footer.cshtml]

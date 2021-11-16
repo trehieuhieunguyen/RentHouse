@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using PayPal.Core;
 using PayPal.v1.Payments;
 using RentHouse.Data;
+using RentHouse.Extensions;
 using RentHouse.Models;
+using RentHouse.Models.ViewModel;
+using RentHouse.Reponsitory.IReponsitory;
 using System.Globalization;
 
 namespace RentHouse.Areas.User.Controllers
@@ -14,12 +17,14 @@ namespace RentHouse.Areas.User.Controllers
         private readonly ApplicationDbContext _db;
         private readonly string _clientId;
         private readonly string _secretKey;
-        public PaymentController(IConfiguration configuration, ApplicationDbContext db)
+        private readonly IRoomReponsitory _res;
+        public PaymentController(IConfiguration configuration, ApplicationDbContext db, IRoomReponsitory res)
         {
 
             _clientId = configuration["Paypal:ClientId"];
             _secretKey = configuration["Paypal:SecretKey"];
             _db = db;
+            _res = res;
         }
         private PayPalHttpClient Client()
         {
@@ -73,7 +78,7 @@ namespace RentHouse.Areas.User.Controllers
                 RedirectUrls = new RedirectUrls()
                 {
                     CancelUrl = $"{hostname}/Payment/Fail?orderId={paypalOrderId}",
-                    ReturnUrl = $"{hostname}/Payment/PaypalSuccess?orderId={paypalOrderId}"
+                    ReturnUrl = $"{hostname}/User/Payment/PaypalSuccess?orderId={paypalOrderId}&roomId={id}"
                 },
                 Payer = new Payer()
                 {
@@ -115,15 +120,14 @@ namespace RentHouse.Areas.User.Controllers
             }
 
         }
-        [Route("PaypalSuccess")]
-        public async Task<IActionResult> PaypalSuccess([FromQuery(Name = "orderId")] string orderId, [FromQuery(Name = "paymentId")] string paymentId, [FromQuery(Name = "PayerID")] string payerID)
+        public async Task<IActionResult> PaypalSuccess([FromQuery(Name = "orderId")] string orderId, [FromQuery(Name = "paymentId")] string paymentId, [FromQuery(Name = "PayerID")] string PayerID, [FromQuery(Name = "roomId")] string roomId)
         {
            
             var request = new PaymentExecuteRequest(paymentId);
 
             request.RequestBody(new PaymentExecution()
             {
-                PayerId = payerID
+                PayerId = PayerID
             });
 
 
@@ -136,8 +140,15 @@ namespace RentHouse.Areas.User.Controllers
             //{ // no blance or something else?
             //    return RedirectToAction(nameof(Fail));
             //}
-
-
+            var room =  await _res.GetRoomForAdmin(int.Parse(roomId));
+            HistoryPay historyPay = new HistoryPay();
+            historyPay.TimePay = DateTime.Now;
+            historyPay.ApplicationUserId = User.GetUserId();
+            historyPay.RoomHouseId = room.Id;
+            historyPay.PricePay = room.PriceRent;
+            _res.CreatePayPal(historyPay);
+            room.StatusRent = true;
+            _res.EditRoom(room);
             var items = new List<Item>();
 
             foreach (var cartitem in payment.Transactions)
@@ -152,7 +163,18 @@ namespace RentHouse.Areas.User.Controllers
                     });
                 }
             }
-            return await Task.Run(() => RedirectToAction("OrderDetails", "Order", new { area = "Customers", id = orderId }));
+            List<HistoryUserVM> historyUserVMs = new List<HistoryUserVM>();
+            var result = await _res.GetHistory(User.GetUserId());
+            foreach (var item in result)
+            {
+                HistoryUserVM historyUserVM = new HistoryUserVM();
+                historyUserVM.historyPays = item;
+                historyUserVM.EmailUser = await _res.GetHouseOfUser(item.RoomHouse.HouseId);
+                historyUserVMs.Add(historyUserVM);
+            }
+            TempData["SuccessFull"] = "Rent Room By PayPal SuccessFull";
+            return await Task.Run(() => RedirectToAction("GetHistoryPay", "Home", historyUserVMs));
+            //return await Task.Run(() => RedirectToAction("Index", "Home", new { id = orderId }));
         }
     }
 }

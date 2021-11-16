@@ -19,6 +19,7 @@ namespace RentHouse.Services
                 smtp.UseDefaultCredentials = false;
                 smtp.Credentials = new NetworkCredential("trehieuhieunguyen3@gmail.com", "hieu01685360016");
                 smtp.EnableSsl = true;
+                smtp.Timeout = 1000;
                 await smtp.SendMailAsync(mail);
             }
         }

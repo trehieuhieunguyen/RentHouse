@@ -5,6 +5,7 @@ using RentHouse.Extensions;
 using RentHouse.Models;
 using RentHouse.Models.ViewModel;
 using RentHouse.Reponsitory.IReponsitory;
+using RentHouse.TokenSevice.ITokenSevice;
 
 namespace RentHouse.Areas.Admins.Controllers
 {
@@ -15,10 +16,14 @@ namespace RentHouse.Areas.Admins.Controllers
 
         private readonly IHouseReponsitory _res;
         private readonly IRoomReponsitory _resroom;
-        public HomeController(IHouseReponsitory res,IRoomReponsitory resroom)
+        private readonly ITokenService _tokenService;
+        private readonly IConfiguration _config;
+        public HomeController(IHouseReponsitory res,IRoomReponsitory resroom, ITokenService tokenService, IConfiguration config)
         {
             _res = res;
             _resroom = resroom;
+            _tokenService = tokenService;
+            _config = config;
         }
 
         public async Task<IActionResult> Index(int pageIndex = 1, [FromQuery(Name = ("input"))] string input = "", int selectpage=4)
@@ -32,7 +37,16 @@ namespace RentHouse.Areas.Admins.Controllers
             ViewBag.pagechoose = selectpage;
             var houses = await _res.GetHouse(ViewBag.keyword);
             var query = await PagingList<House>.CreateAsync(houses, ViewBag.pagechoose, pageIndex);
-            return View(query);
+            string token = HttpContext.Session.GetString("Token");
+            if (_tokenService.ValidateToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), token))
+            {
+                return View(query);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            
         }
         public async Task<IActionResult> CreateHouse()
         {         
@@ -341,6 +355,47 @@ namespace RentHouse.Areas.Admins.Controllers
               return  RedirectToAction("DetailRoomInHouse", new { id = x.HouseId });
             }
             return BadRequest();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangeRoom(int dataroom2, int roomNumber)
+        {
+            IList<RoomHouse> roomHouses = new List<RoomHouse>();
+            var x = await _resroom.GetRoomForAdmin(dataroom2);
+            if (roomNumber == 0 || roomNumber > x.house.AllRoom)
+            {
+                TempData["Error"] = "Please re-enter the room number";
+                return RedirectToAction("DetailRoomInHouse", new { id = x.HouseId });
+            }
+            if (_resroom.CheckRoomNumberChange(x.Id, x.HouseId) == false)
+            {
+                TempData["Error"] = "This room you are renting";
+                return RedirectToAction("DetailRoomInHouse", new { id = x.HouseId });
+            }
+            if (_resroom.CheckRoomNumberCreate(roomNumber, x.HouseId) == true)
+            {
+                TempData["Error"] = "This room hasn't been created yet";
+                return RedirectToAction("DetailRoomInHouse", new { id = x.HouseId });
+            }
+            if (_resroom.CheckRoomNumberHadRent(roomNumber, x.HouseId) == false)
+            {
+                TempData["Error"] = "This room is already rented";
+                return RedirectToAction("DetailRoomInHouse", new { id = x.HouseId });
+            }
+            else
+            {
+                x.StatusRent = false;
+                roomHouses.Add(x);
+                var roomEdit =await _resroom.GetRoomEdit(x.HouseId, roomNumber);
+                roomEdit.StatusRent = true;
+                roomHouses.Add(roomEdit);
+                _resroom.SaveMutilRoom(roomHouses);
+                var history =   await _resroom.GetHistoryForAdmin(x.Id);
+                history.RoomHouseId = roomEdit.Id;
+                _resroom.EditHistory(history);
+                TempData["SuccessFull"] = "Change Data Successfull";
+                return RedirectToAction("DetailRoomInHouse", new { id = x.HouseId });
+            }
+             return BadRequest();
         }
     }
 }

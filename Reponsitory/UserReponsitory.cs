@@ -82,5 +82,6 @@ namespace RentHouse.Reponsitory
             _db.applicationUsers.Add(applicationUser);
             return SaveChange();
         }
+        
     }
 }

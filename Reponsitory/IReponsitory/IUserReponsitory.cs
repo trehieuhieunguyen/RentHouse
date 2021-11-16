@@ -11,5 +11,6 @@ namespace RentHouse.Reponsitory.IReponsitory
         bool SaveChange();
         bool UpdateUser(ApplicationUser applicationUser);
         Task<bool> DeleteUser(string id);
+       
     }
 }

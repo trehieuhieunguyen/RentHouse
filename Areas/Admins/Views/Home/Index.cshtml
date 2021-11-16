@@ -103,7 +103,7 @@
 				<td>
 					<a asp-action="EditHouse" asp-route-id="@item.Id">Edit</a>|
 					<a asp-action="DetailHouse" asp-route-id="@item.Id">Details</a>|
-					@*<a asp-action="DetailRoomInHouse" asp-route-id="@item.Id">DetailsRoom</a>|*@
+					
 					@if (!item.isDeleted)
 					{
 						<button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="modal" data-target="#exampleModalCenter" value="@item.Id">Delete</button>
@@ -112,7 +112,7 @@
 					{
 						<button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="modal" data-target="#exampleModalCenter" value="@item.Id">Active</button>
 					}
-
+					<a asp-action="DetailRoomInHouse" asp-route-id="@item.Id">DetailsRoom</a>|
 				</td>
 			</tr>
 

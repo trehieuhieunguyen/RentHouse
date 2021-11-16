@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using RentHouse.TokenSevice.ITokenSevice;
+using RentHouse.Models;
 
 namespace RentHouse.Areas.Identity.Pages.Account
 {
@@ -22,12 +24,22 @@ namespace RentHouse.Areas.Identity.Pages.Account
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ITokenService _tokenService;
+        private readonly IConfiguration _config;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, UserManager<IdentityUser> userManager)
+        public LoginModel(
+            SignInManager<IdentityUser> signInManager,
+            ILogger<LoginModel> logger, 
+            UserManager<IdentityUser> userManager, 
+            ITokenService tokenService,
+            IConfiguration configuration
+        )
         {
             _signInManager = signInManager;
             _logger = logger;
             _userManager = userManager;
+            _tokenService = tokenService;
+            _config = configuration;
         }
 
         /// <summary>
@@ -117,8 +129,14 @@ namespace RentHouse.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = (ApplicationUser)await _userManager.FindByEmailAsync(Input.Email);
 
-                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    var generatedToken = await _tokenService.BuildToken(_config["Jwt:Key"].ToString(), _config["Jwt:Issuer"].ToString(), user);
+                    if (generatedToken != null)
+                    {
+                        HttpContext.Session.SetString("Token", generatedToken);
+                    }
+                   
                     if (user.LockoutEnabled == false)
                     {
                         _logger.LogWarning("User account locked out.");
@@ -126,11 +144,12 @@ namespace RentHouse.Areas.Identity.Pages.Account
                     }
                     _logger.LogInformation("User logged in.");
                     var roles = await _userManager.GetRolesAsync(user);
+                    
                     if (roles.Contains("Admins"))
                     {
                         return RedirectToAction("Index", "Home", new { area = "Admins" });
                     }
-                    
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

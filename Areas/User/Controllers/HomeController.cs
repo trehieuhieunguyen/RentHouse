@@ -214,5 +214,19 @@ namespace RentHouse.Areas.User.Controllers
                 return View();
             }
         }
+        public async Task<IActionResult> GetHistoryPay()
+        {
+            List<HistoryUserVM> historyUserVMs = new List<HistoryUserVM>();
+            var result =await _res.GetHistory(User.GetUserId());
+            foreach(var item in result)
+            {
+                HistoryUserVM historyUserVM = new HistoryUserVM();
+                historyUserVM.historyPays = item;
+                historyUserVM.EmailUser = await _res.GetHouseOfUser(item.RoomHouse.HouseId);
+                historyUserVMs.Add(historyUserVM);
+            }
+            
+            return View(historyUserVMs);
+        }
     }
 }

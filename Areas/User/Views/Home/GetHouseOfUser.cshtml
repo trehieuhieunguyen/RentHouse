@@ -82,18 +82,7 @@
 }
     </tbody>
 </table>
-@if (TempData["SuccessFull"] != null)
-{
-	<div class="p-3 mb-2 bg-success text-white">
-		@TempData["SuccessFull"]
-	</div>
-}
-@if (TempData["Error"] != null)
-{
-	<div class="p-3 mb-2 bg-danger text-white">
-		@TempData["Error"]
-	</div>
-}
+
 @foreach (var y in Model)
 {
 	<a class="text-decoration-none" asp-action="DetailAllHouse" asp-route-id="@y.Id"><h1>Detail All Room In House</h1></a>
@@ -101,7 +90,7 @@
 }
 <div class="container">
 	<div class="row">
-		@for (int x = 1; x <= Model.Count()+1; x++)
+		@for (int x = 0; x <= Model.Count()+1; x++)
 		{
 			foreach (var y in Model)
 			{

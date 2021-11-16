@@ -1,12 +1,17 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ReflectionIT.Mvc.Paging;
 using RentHouse.Areas.User.Controllers;
 using RentHouse.Data;
 using RentHouse.Reponsitory;
 using RentHouse.Reponsitory.IReponsitory;
 using RentHouse.Services;
+using RentHouse.TokenSevice;
+using RentHouse.TokenSevice.ITokenSevice;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +30,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
     options.SignIn.RequireConfirmedAccount = true;
 }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultUI().AddDefaultTokenProviders();
 builder.Services.AddPaging();
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(10);
@@ -34,21 +40,35 @@ builder.Services.AddScoped<IUserReponsitory, UserReponsitory>();
 builder.Services.AddScoped<IDashBoardReponsitory, DashBoardReponsitory>();
 builder.Services.AddScoped<IRoomReponsitory, RoomReponsitory>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
-builder.Services.AddSignalR();
-builder.Services.AddSingleton<IEmailSender, EmailSender>();
-builder.Services.AddAuthentication()
-               .AddGoogle(options =>
-               {
-                   IConfigurationSection googleAuthSection = configuration.GetSection("Authentication:Google");
 
-                   options.ClientId = googleAuthSection["ClientId"];
-                   options.ClientSecret = googleAuthSection["ClientSecret"];
-               })
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = configuration["Jwt:Issuer"],
+        ValidAudience = configuration["Jwt:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+    };
+
+}).AddGoogle(options =>
+{
+    IConfigurationSection googleAuthSection = configuration.GetSection("Authentication:Google");
+
+    options.ClientId = googleAuthSection["ClientId"];
+    options.ClientSecret = googleAuthSection["ClientSecret"];
+})
                 .AddFacebook(FacebookOption =>
                 {
                     FacebookOption.AppId = configuration["Authentication:Facebook:AppId"];
                     FacebookOption.AppSecret = configuration["Authentication:Facebook:AppSecret"];
                 });
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -70,6 +90,15 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
+app.Use(async (context, next) =>
+{
+    var token = context.Session.GetString("Token");
+    if (!string.IsNullOrEmpty(token))
+    {
+        context.Request.Headers.Add("Authorization", "Bearer " + token);
+    }
+    await next();
+});
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
