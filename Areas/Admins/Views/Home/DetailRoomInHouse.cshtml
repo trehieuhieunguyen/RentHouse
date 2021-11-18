@@ -37,9 +37,35 @@
 					{
 						<div class="col-md-3 m-lg-3">
 							<button class="btn btn-primary btn-sm ml-5 position-absolute" type="button" data-toggle="modal" data-target="#exampleModalCenter2" value="@y.Id"><i class="fas fa-copy"></i></button>
-							<button class="btn btn-primary btn-sm position-absolute" style="margin-left: 80px;" id="changedata" type="button" data-toggle="modal" data-target="#exampleModalCenter3" value="@y.Id"><i class="fas fa-angle-double-right"></i></button>
+							<button class="btn btn-primary btn-sm position-absolute" style="margin-left: 80px;"  type="button" data-toggle="modal" data-target="#exampleModalCenter3" value="@y.Id">@y.Id<i class="fas fa-angle-double-right"></i></button>
 							<a type="button" asp-area="User" asp-controller="Home" asp-action="DetailRoom" asp-route-id="@y.Id" class="btn btn-danger ml-5" style="width:300px; height:150px;"><i class="fa fa-home" aria-hidden="true" style="width:50%; height:50%;"></i><h1>Room:@x</h1></a>
-							
+
+						</div>
+						<div id="exampleModalCenter3" class="modal fade">
+							<div class="modal-dialog modal-confirm">
+								<div class="modal-content">
+									<div class="modal-header flex-column">
+										<h4 class="modal-title w-100">Are you sure?</h4>
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+									</div>
+									<div class="modal-body">
+										<p>De you change room to other roomhouse</p>
+									</div>
+									<div class="modal-footer justify-content-center">
+
+										<form asp-action="ChangeRoom" name="myForm">
+
+											<input type="hidden" id="dataroom2" name="dataroom2" />
+											<input type="text" class="form-control mb-3" id="roomNumber" name="roomNumber" placeholder="RoomNumber" />
+											<span asp-validation-for="@Model.AllRoom" class="text-danger"></span>
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+											<input type="submit" value="Sure" class="btn btn-success"  />
+
+										</form>
+
+									</div>
+								</div>
+							</div>
 						</div>
 						Model.roomHouses.Remove(y);
 						break;
@@ -48,7 +74,7 @@
 					{
 						<div class="col-md-3 m-lg-3">
 							<button class="btn btn-primary btn-sm ml-5 position-absolute" type="button" data-toggle="modal" data-target="#exampleModalCenter2" value="@y.Id"><i class="fas fa-copy"></i></button>
-						<a type="button" asp-area="User" asp-controller="Home" asp-action="DetailRoom" asp-route-id="@y.Id" class="btn btn-success ml-5" style="width:300px; height:150px;"><i class="fa fa-home" aria-hidden="true" style="width:50%; height:50%;"></i><h1>Room:@x</h1></a>
+							<a type="button" asp-area="User" asp-controller="Home" asp-action="DetailRoom" asp-route-id="@y.Id" class="btn btn-success ml-5" style="width:300px; height:150px;"><i class="fa fa-home" aria-hidden="true" style="width:50%; height:50%;"></i><h1>Room:@x</h1></a>
 						</div>
 						Model.roomHouses.Remove(y);
 						break;
@@ -83,7 +109,7 @@
 						<input type="text" class="form-control mb-3" id="roomNumber" name="roomNumber" placeholder="RoomNumber" />
 						<span asp-validation-for="@Model.AllRoom" class="text-danger"></span>
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-						<input type="submit" value="Sure" class="btn btn-success" onclick="validateForm()" />
+						<input type="submit" value="Sure" class="btn btn-success"  />
 
 					</form>
 
@@ -91,35 +117,11 @@
 			</div>
 		</div>
 	</div>
-	<div id="exampleModalCenter3" class="modal fade">
-		<div class="modal-dialog modal-confirm">
-			<div class="modal-content">
-				<div class="modal-header flex-column">
-					<h4 class="modal-title w-100">Are you sure?</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-				</div>
-				<div class="modal-body">
-					<p>De you change room to other roomhouse</p>
-				</div>
-				<div class="modal-footer justify-content-center">
 
-					<form asp-action="ChangeRoom" name="myForm">
-
-						<input type="hidden" id="dataroom2" name="dataroom2" value="" />
-						<input type="text" class="form-control mb-3" id="roomNumber" name="roomNumber" placeholder="RoomNumber" />
-						<span asp-validation-for="@Model.AllRoom" class="text-danger"></span>
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-						<input type="submit" value="Sure" class="btn btn-success" onclick="validateForm()" />
-
-					</form>
-
-				</div>
-			</div>
-		</div>
-	</div>
 </div>
 @section Scripts{
 <script>
+
 	$("button").click(function() {
 	var id_remove = $(this).attr('value');
 		console.log(id_remove);
@@ -127,11 +129,11 @@
 	var data_room = $(this).attr('value');
 		console.log(data_room);
 		   $("#dataroom").attr("value", data_room );
-	});
-	$("#changedata").click(function() {
-	var data_room2 = $(this).attr('value');
+		   var data_room2 = $(this).attr('value');
+	console.log(data_room2);
 		   $("#dataroom2").attr("value", data_room2 );
 	});
+	
 </script>
 }
 

@@ -23,5 +23,6 @@ namespace RentHouse.Services
                 await smtp.SendMailAsync(mail);
             }
         }
+       
     }
 }

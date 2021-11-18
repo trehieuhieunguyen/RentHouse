@@ -18,6 +18,7 @@ namespace RentHouse.Controllers
 
         public async Task<IActionResult> Index(int pageIndex = 1,[FromQuery(Name = ("input"))] string input = "", string priceRent = "", int selectpage = 6)
         {
+          
             ViewBag.keyword = input;
             ViewBag.pagechoose = selectpage;
             var houses = await _res.GetRoomHouseForUser(ViewBag.keyword,priceRent);

@@ -337,6 +337,7 @@ namespace RentHouse.Areas.Admins.Controllers
             roomHouse.UpdateTime = DateTime.Now;
             roomHouse.RoomSize = x.RoomSize;
             roomHouse.UrlImg = x.UrlImg;
+            roomHouse.Star = 4;
             ICollection<ImageUploadOfRoom> imageUploadOfRooms = await _resroom.imageUploadOfRooms(dataroom);
             IList<ImageUploadOfRoom> imageUploadOfRoomsNew = new List<ImageUploadOfRoom>();
             if (_resroom.CreateRoom(roomHouse))
@@ -361,6 +362,10 @@ namespace RentHouse.Areas.Admins.Controllers
         {
             IList<RoomHouse> roomHouses = new List<RoomHouse>();
             var x = await _resroom.GetRoomForAdmin(dataroom2);
+            if (x == null)
+            {
+                return BadRequest();
+            }
             if (roomNumber == 0 || roomNumber > x.house.AllRoom)
             {
                 TempData["Error"] = "Please re-enter the room number";
@@ -396,6 +401,21 @@ namespace RentHouse.Areas.Admins.Controllers
                 return RedirectToAction("DetailRoomInHouse", new { id = x.HouseId });
             }
              return BadRequest();
+        }
+        public async Task<IActionResult> GetConFirmHouse()
+        {
+            var result = await _res.getConfirmHouse();
+            return View(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetConFirmHouse(int idconfirm)
+        {
+            var house =await _res.GetHouseById(idconfirm);
+            house.ConfirmHouse = false;
+           await _res.EditHouse(house);
+            TempData["SuccessFull"] = "Confirm Data Successfull";
+            var result = await _res.getConfirmHouse();
+            return View(result);
         }
     }
 }

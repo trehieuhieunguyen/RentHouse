@@ -133,6 +133,7 @@ namespace RentHouse.Areas.User.Controllers
             }
             house.TimeCreate = DateTime.Now;
             house.TimeUpdate = DateTime.Now;
+            house.ConfirmHouse = true;
             if (ModelState.IsValid)
             {
                 //if (house.District.Length < 5)
@@ -166,7 +167,6 @@ namespace RentHouse.Areas.User.Controllers
                     await _resHouse.CreateHouseOfUser(houseOfUser);
                     if (await UpdateSubImage(houseVM))
                     {
-                        TempData["SuccessFull"] = "Create House SuccessFull";
                         return RedirectToAction("Index");
                     }
                 }
@@ -228,5 +228,6 @@ namespace RentHouse.Areas.User.Controllers
             
             return View(historyUserVMs);
         }
+        
     }
 }

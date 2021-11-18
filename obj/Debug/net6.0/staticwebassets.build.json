@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "p/aQa7wIdrggX9ac2glnDpevNxcRo5dfQxZ/4/mpRAo=",
+  "Hash": "t/FtTayQPSAVP5S1qt5JRTCzRS3Tx24Qg/45AMtpw+0=",
   "Source": "RentHouse",
   "BasePath": "_content/RentHouse",
   "Mode": "Default",
@@ -1154,6 +1154,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\templatemo-sixteen.css"
+    },
+    {
+      "Identity": "C:\\Users\\ASUS\\source\\repos\\RentHouse\\RentHouse\\wwwroot\\css\\templatemo-style.css",
+      "SourceId": "RentHouse",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ASUS\\source\\repos\\RentHouse\\RentHouse\\wwwroot\\",
+      "BasePath": "_content/RentHouse",
+      "RelativePath": "css/templatemo-style.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\templatemo-style.css"
     },
     {
       "Identity": "C:\\Users\\ASUS\\source\\repos\\RentHouse\\RentHouse\\wwwroot\\favicon.ico",

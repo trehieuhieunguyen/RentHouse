@@ -34,7 +34,6 @@
 
 <div class="col-md-12">
 	<div class="section-heading">
-		<h2>Latest Products</h2>
 		<a href="products.html">view all products <i class="fa fa-angle-right"></i></a>
 	</div>
 	@if (this.Model.PageCount > 1)
@@ -94,13 +93,13 @@
 		<div class="product-item">
 			<a href="#"><img src="/img/@x.UrlImg" alt="" height="243"></a>
 			<div class="down-content">
-				<a href="#"><h4>Tittle goes here</h4></a>
-				<h6>$@x.PriceRent</h6>
-				<p>Name House: @x.house.NameHourse 				</p>
+				<a asp-action="DetailRoom" asp-route-id="@x.Id" asp-area="User"><h4>Number Room: @x.RoomNumber</h4></a>
+				<h6>Price: $@x.PriceRent</h6>
+				<p>Name House: @x.house.NameHourse</p>
+				<p>Windown: @x.Windowns</p>
 				<span class="text-warning" style="height:35px;font-size:22px;">
 					<i class="fas fa-star"></i>
 						@x.Star 
-					
 				</span>
 					
 				<a class="btn btn-outline-dark mt-auto" asp-action="DetailRoom" asp-route-id="@x.Id" asp-area="User">View options</a>

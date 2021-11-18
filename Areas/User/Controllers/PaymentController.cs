@@ -1,4 +1,5 @@
 ﻿using BraintreeHttp;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using PayPal.Core;
 using PayPal.v1.Payments;
@@ -8,6 +9,7 @@ using RentHouse.Models;
 using RentHouse.Models.ViewModel;
 using RentHouse.Reponsitory.IReponsitory;
 using System.Globalization;
+using System.Text.Encodings.Web;
 
 namespace RentHouse.Areas.User.Controllers
 {
@@ -18,13 +20,15 @@ namespace RentHouse.Areas.User.Controllers
         private readonly string _clientId;
         private readonly string _secretKey;
         private readonly IRoomReponsitory _res;
-        public PaymentController(IConfiguration configuration, ApplicationDbContext db, IRoomReponsitory res)
+        private readonly IEmailSender _emailSender;
+        public PaymentController(IConfiguration configuration, ApplicationDbContext db, IRoomReponsitory res, IEmailSender emailSender)
         {
 
             _clientId = configuration["Paypal:ClientId"];
             _secretKey = configuration["Paypal:SecretKey"];
             _db = db;
             _res = res;
+            _emailSender = emailSender;
         }
         private PayPalHttpClient Client()
         {
@@ -172,6 +176,14 @@ namespace RentHouse.Areas.User.Controllers
                 historyUserVM.EmailUser = await _res.GetHouseOfUser(item.RoomHouse.HouseId);
                 historyUserVMs.Add(historyUserVM);
             }
+            var user  =await _res.GetApplicationUser(User.GetUserId()); 
+            var x = await _res.GetHouseOfUser(historyPay.RoomHouse.HouseId);
+            await _emailSender.SendEmailAsync(await _res.GetHouseOfUser(historyPay.RoomHouse.HouseId), "Have PeoPal RentHouse",
+                            $"RenHouse Name: {historyPay.RoomHouse.house.NameHourse} " +
+                            $"<div></div> RomNumber: { historyPay.RoomHouse.RoomNumber}" +
+                            $"<div></div> PayPal Price: {historyPay.PricePay.ToString()}$"+
+                            $"<div></div> User Rent: {user}" +
+                            $"<div></div>Room House: <a href='{Request.Scheme}://{Request.Host}/User/Home/DetailRoom/{roomId}'>YourRoom</a>");
             TempData["SuccessFull"] = "Rent Room By PayPal SuccessFull";
             return await Task.Run(() => RedirectToAction("GetHistoryPay", "Home", historyUserVMs));
             //return await Task.Run(() => RedirectToAction("Index", "Home", new { id = orderId }));

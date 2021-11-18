@@ -34,5 +34,6 @@ namespace RentHouse.Reponsitory.IReponsitory
         bool EditHistory(HistoryPay historyPay);
          Task<RoomHouse> GetRoomEdit(int houseId, int roomnumber);
         bool SaveMutilRoom(IList<RoomHouse> roomHouses);
+        Task<ApplicationUser> GetApplicationUser(string id);
     }
 }

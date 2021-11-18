@@ -1,0 +1,84 @@
+﻿@model IEnumerable<RentHouse.Models.House>
+
+@{
+    ViewData["Title"] = "GetConFirmHouse";
+    Layout = "~/Areas/Admins/Views/Shared/_Layout.cshtml";
+}
+
+<h1>GetConFirmHouse</h1>
+@if (TempData["SuccessFull"] != null)
+{
+	<div class="p-3 mb-2 bg-success text-white">
+		@TempData["SuccessFull"]
+	</div>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NameHourse)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImgUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ward)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.District)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeCreate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeUpdate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AllRoom)
+            </th>
+           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameHourse)
+            </td>
+            <td>
+                <img style="width:70px;height:40px;" src="/img/@item.ImgUrl" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ward)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.District)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeCreate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeUpdate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AllRoom)
+            </td>
+           
+            <td>
+                <form asp-action="GetConFirmHouse"  >
+                                <input type="hidden" id="idconfirm" name="idconfirm" value="@item.Id" />
+								<input type="submit" value="Confirm" class="btn btn-success" />
+				</form>
+                
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

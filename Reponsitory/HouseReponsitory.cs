@@ -123,5 +123,10 @@ namespace RentHouse.Reponsitory
             }
             return hou;
         }
+        public async Task<ICollection<House>> getConfirmHouse()
+        {
+            var x = await _db.houses.Where(x => x.ConfirmHouse == true).ToListAsync();
+            return x;
+        }
     }
 }

@@ -168,6 +168,7 @@ namespace RentHouse.Areas.Identity.Pages.Account
                         await _userManager.AddToRoleAsync(aUser, "User");
                         var userId = await _userManager.GetUserIdAsync(userApplicationUser);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(userApplicationUser);
+                        
                         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                         var callbackUrl = Url.Page(
                             "/Account/ConfirmEmail",

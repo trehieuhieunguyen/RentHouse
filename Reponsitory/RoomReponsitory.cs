@@ -296,5 +296,10 @@ namespace RentHouse.Reponsitory
             _db.roomHouses.UpdateRange(roomHouses);
             return SaveChange();
         }
+        public async Task<ApplicationUser> GetApplicationUser(string id)
+        {
+            var user = await _db.applicationUsers.FirstOrDefaultAsync(x=>x.Id==id);
+            return user;
+        }
     }
 }
